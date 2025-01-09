@@ -1,9 +1,12 @@
 package DAO;
 
+import Utilities.Constants.SqlQueries;
+
 public class UserDAO {
+
+
     public boolean addUser(String userName, String password) {
-        // Add user to database
-        // int res = insert username and password into db
+        String query = SqlQueries.SELECT_ALL_USERS;
 
         return true;
     }
