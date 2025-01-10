@@ -1,6 +1,6 @@
 package DAO;
 
-import Utilities.Constants.ErrorMessages;
+import Utilities.Constants.ErrorMessage;
 import Utilities.Constants.SqlQueries;
 import Utilities.DBConnection;
 
@@ -23,7 +23,7 @@ public class ProductDAO {
 
             return preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(ErrorMessages.ERROR_WHILE_REGISTER);
+            System.out.println(ErrorMessage.ERROR_WHILE_REGISTER);
         }
         return 0;
     }
