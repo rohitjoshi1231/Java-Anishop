@@ -2,6 +2,7 @@ package DAO;
 
 import java.sql.*;
 
+import Utilities.Constants.ErrorMessages;
 import Utilities.DBConnection;
 import Utilities.Constants.SqlQueries;
 
@@ -15,16 +16,10 @@ public class UserDAO {
             int age,
             String phoneNumber) {
 
-        try {
+        try (Connection conn = DBConnection.connect()) {
 
-            Connection conn = DBConnection.connect();
-            // Statement s1 = conn.createStatement();
-            // int res = s1.executeUpdate(SqlQueries.INSERT_STRING);
-
-            // System.out.println("Rows affected: " + res);
-
+            assert conn != null;
             PreparedStatement preparedStatement = conn.prepareStatement(SqlQueries.INSERT_STRING);
-            // Setting parameters in the sql
 
             preparedStatement.setString(1, emailId);
             preparedStatement.setString(2, password);
@@ -35,10 +30,8 @@ public class UserDAO {
 
             int rowsAffected = preparedStatement.executeUpdate();
             System.out.println("Rows affected: " + rowsAffected);
-
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error while registering the user.");
+            System.out.println(ErrorMessages.ERROR_WHILE_REGISTER);
         }
     }
 }
