@@ -7,4 +7,5 @@ public class ErrorMessage {
     public static final String INVALID_GENDER = "Gender must be 'M' for male or 'F' for female.";
     public static final String INVALID_AGE = "Age must be a positive number and less than 120.";
     public static final String INVALID_PHONE_NUMBER = "Phone number must be exactly 10 digits.";
+    public static final String ERROR_WHILE_REGISTER = "Error while registering the user.";
 }
