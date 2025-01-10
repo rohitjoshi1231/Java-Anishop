@@ -9,5 +9,7 @@ public class UserMenu {
         UserService service = new UserService();
         // service.registerUser("rohitjoshi@124", "R@ohit1234444", "rohit", 'M', 21, "0394829288");
         service.loginUser();
+
+
     }
 }
