@@ -2,12 +2,8 @@ package Service_layer;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import com.mysql.cj.xdevapi.Statement;
-
 import DAO.UserDAO;
 import Utilities.ValidationUtil;
-import Utilities.Constants.SqlQueries;
 
 public class UserService {
     private final ValidationUtil validation = new ValidationUtil();
