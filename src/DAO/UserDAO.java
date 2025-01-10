@@ -19,7 +19,7 @@ public class UserDAO {
         try (Connection conn = DBConnection.connect()) {
 
             assert conn != null;
-            PreparedStatement preparedStatement = conn.prepareStatement(SqlQueries.INSERT_STRING);
+            PreparedStatement preparedStatement = conn.prepareStatement(SqlQueries.INSERT_USER_REGISTER);
 
             preparedStatement.setString(1, emailId);
             preparedStatement.setString(2, password);
