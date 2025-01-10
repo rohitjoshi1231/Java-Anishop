@@ -1,56 +1,63 @@
 package Service_layer;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import com.mysql.cj.xdevapi.Statement;
+
 import DAO.UserDAO;
-import Utilities.Constants.ErrorMessage;
+import Utilities.ValidationUtil;
+import Utilities.Constants.SqlQueries;
 
 public class UserService {
+    private final ValidationUtil validation = new ValidationUtil();
     private final UserDAO userDAO = new UserDAO();
 
-    public void registerUser(     
+    public void registerUser(
             String emailId,
             String password,
             String name,
             char gender,
             int age,
-            String phoneNumber){
+            String phoneNumber) {
 
-        // Validate email ID
-        if (emailId == null || !emailId.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_EMAIL);
-        }
-
-        // Validate password (at least 8 characters, 1 uppercase, 1 digit)
-        else if (password == null || !password.matches("^(?=.*[A-Z])(?=.*\\d).{8,}$")) {
-            throw new IllegalArgumentException(
-                    ErrorMessage.INVALID_PASSWORD);
-        }
-
-        // Validate name (non-empty, alphabets only)
-        else if (name == null || !name.matches("^[A-Za-z ]+$")) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_NAME);
-        }
-
-        // Validate gender (allowed values: 'M' or 'F')
-        else if (gender != 'M' && gender != 'F' && gender != 'O') {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_GENDER);
-        }
-
-        // Validate age (must be a positive number and reasonable)
-        else if (age <= 0 || age > 120) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_AGE);
-        }
-
-        // Validate phone number (10 digits)
-        else if (phoneNumber == null || !phoneNumber.matches("^\\d{10}$")) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_PHONE_NUMBER);
-        }
-
-        else {
+        if (validation.validateRegister(emailId, password, name, gender, age, phoneNumber)) {
+            userDAO.registerUser(emailId, password, name, gender, age, phoneNumber);
+        } else {
             System.out.println("Please Enter correct details !");
         }
-        
-        userDAO.registerUser(emailId, password, name, gender, age, phoneNumber);
-        
-        
+
     }
+
+    public void loginUser() {
+        UserDAO userDAO = new UserDAO();
+        ResultSet res1 = null; // result set ki value
+        try {
+            // Fetch user details
+            res1 = userDAO.loginUser();
+
+            if (res1 == null) {
+                System.out.println("No data found or an error occurred while fetching user details.");
+                return;
+            }
+
+            // Iterate through the result set
+            while (res1.next()) {
+                String emailId = res1.getString("EmailId");
+                String password = res1.getString("Password");
+                System.out.println("EmailId: " + emailId + ", Password: " + password);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error while processing user details: " + e.getMessage());
+        } finally {
+            if (res1 != null) {
+                try {
+                    res1.close();
+                } catch (SQLException e) {
+                    System.out.println("Error while closing the ResultSet: " + e.getMessage());
+                }
+            }
+        }
+    }
+
 }
