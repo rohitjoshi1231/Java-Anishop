@@ -7,6 +7,9 @@ import DAO.UserDAO;
 import Utilities.Constants.ErrorMessage;
 
 public class CartService {
+    public static int addCart(int productId, int Quantity) {
+        
+    }
 
     
 }

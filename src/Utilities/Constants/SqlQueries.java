@@ -7,5 +7,6 @@ public class SqlQueries {
     public static final String INSERT_PRODUCT = "INSERT INTO products (ProductName, ProductDescription, ProductStock, ProductPrice) VALUES (?, ?, ?, ?)";
     public static final String INSERT_CART = "INSERT INTO cart (ProductId, Quantity, PriceAtAdd ) VALUES (?, ?, ?)";
     public static final String SELECT_ALL_PRODUCTS = "SELECT * FROM products";
+    public static final String SELECT_PRODUCT_WITH_ID = "SELECT * FROM products where productid = ?";
 }
 

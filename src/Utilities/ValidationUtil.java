@@ -71,7 +71,17 @@ public class ValidationUtil {
             return false;
         }
     }
-  
+
+    public int validateQuantity(int Quantity)
+    {
+        if (Quantity < 0) {
+            return Quantity = 1;
+        }
+        return Quantity;
+        
+    }
+
+    
     
 
     
