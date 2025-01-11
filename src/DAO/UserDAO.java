@@ -8,7 +8,8 @@ import Utilities.Constants.SqlQueries;
 
 public class UserDAO {
 
-    private final  Connection conn = DBConnection.connect();
+    private final Connection conn = DBConnection.connect();
+
     public void registerUser(
             String emailId,
             String password,
@@ -35,11 +36,12 @@ public class UserDAO {
             System.out.println(ErrorMessage.ERROR_WHILE_REGISTER);
         }
     }
-    
+
     public ResultSet loginUser() {
         ResultSet res1 = null;
         try {
             String userDataQuery = SqlQueries.SELECT_ALL_USERS;
+            assert conn != null;
             Statement userData = conn.createStatement();
             // Execute the query and get the result set
             res1 = userData.executeQuery(userDataQuery);
