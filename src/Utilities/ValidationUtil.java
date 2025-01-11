@@ -54,11 +54,8 @@ public class ValidationUtil {
         }
     }
 
-    public int validateQuantity(int Quantity) {
-        if (Quantity < 0) {
-            return Quantity = 1;
-        }
-        return 1;
+    public boolean validateQuantity(int Quantity) {
+        return Quantity > 0;
     }
 
 

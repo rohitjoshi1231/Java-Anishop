@@ -12,4 +12,6 @@ public class ErrorMessage {
     public static final String ERROR_WHILE_LOGIN = "Incorrect credentials";
     public static final String ERROR_WHILE_ADDING_PRODUCT_IN_CART = "Error in adding the products in cart";
     public static final String ERROR_IN_SHOWING_PRODUCT = "Error in showing the product";
+    public static final String ERROR_WHILE_DISPLAYING_PRODUCT_IN_CART = "Error in displaying the product";
+
 }

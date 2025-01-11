@@ -7,6 +7,8 @@ public class CartDisplay {
         System.out.println("Welcome to the User Cart");
         CartService service = new CartService();
         // service.addCart(1);
+        service.displayCartItems();
+
     }
 
 }

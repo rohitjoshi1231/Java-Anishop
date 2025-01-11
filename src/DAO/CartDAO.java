@@ -8,13 +8,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+
 
 public class CartDAO {
+    private static final Connection conn = DBConnection.connect();
+
     public static ResultSet showSelectedProduct(int productId) {
-        final Connection conn = DBConnection.connect();
         ResultSet res1 = null;
-        try {
+        try (conn) {
             PreparedStatement preparedStatement = conn.prepareStatement(SqlQueries.SELECT_PRODUCT_WITH_ID);
 
             preparedStatement.setInt(1, productId);
@@ -25,14 +26,13 @@ public class CartDAO {
         return res1; // Return the result set (can be null if an error occurred)
     }
 
-    public static int addCart(int productId , int Quantity) {
-        try (Connection conn = DBConnection.connect()) {
+    public int addCart(int productId, int Quantity) {
+        try (conn) {
             assert conn != null;
             ResultSet productDetails = showSelectedProduct(productId);
             PreparedStatement preparedStatement = conn.prepareStatement(SqlQueries.INSERT_CART);
-            while (productDetails.next()) 
-            {
-               
+            while (productDetails.next()) {
+
                 int productId1 = productDetails.getInt("ProductId");
                 // String productName = productDetails.getString("ProductName");
                 // String productDescription = productDetails.getString("ProductDescription");
@@ -52,5 +52,6 @@ public class CartDAO {
         }
         return 0;
     }
+
 
 }
