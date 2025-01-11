@@ -8,7 +8,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class CartDAO {
     public static ResultSet showSelectedProduct(int productId) {
@@ -25,14 +24,13 @@ public class CartDAO {
         return res1; // Return the result set (can be null if an error occurred)
     }
 
-    public static int addCart(int productId , int Quantity) {
+    public static int addCart(int productId, int Quantity) {
         try (Connection conn = DBConnection.connect()) {
             assert conn != null;
             ResultSet productDetails = showSelectedProduct(productId);
             PreparedStatement preparedStatement = conn.prepareStatement(SqlQueries.INSERT_CART);
-            while (productDetails.next()) 
-            {
-               
+            while (productDetails.next()) {
+
                 int productId1 = productDetails.getInt("ProductId");
                 // String productName = productDetails.getString("ProductName");
                 // String productDescription = productDetails.getString("ProductDescription");
