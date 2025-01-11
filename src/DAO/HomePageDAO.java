@@ -13,20 +13,16 @@ public class HomePageDAO {
     private final static Connection conn = DBConnection.connect();
 
     public ResultSet showProducts() {
-        ResultSet res1 = null;
-        try (conn) {
+        try {
             assert conn != null;
             String userDataQuery = SqlQueries.SELECT_ALL_PRODUCTS;
-            Statement productDAta = conn.createStatement();
-            res1 = productDAta.executeQuery(userDataQuery);
-
-
-            return res1;
-
+            Statement productData = conn.createStatement();
+            return productData.executeQuery(userDataQuery);
 
         } catch (SQLException e) {
             System.out.println(ErrorMessage.ERROR_WHILE_REGISTER);
+            e.printStackTrace();
         }
-        return res1;
+        return null;
     }
 }
