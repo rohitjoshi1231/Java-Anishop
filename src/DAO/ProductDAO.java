@@ -6,10 +6,13 @@ import Utilities.DBConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class ProductDAO {
 
+    private final Connection conn = DBConnection.connect();
     public static int addProduct(String productName, String productDescription, int productStock, double productPrice) {
 
         try (Connection conn = DBConnection.connect()) {
@@ -26,6 +29,19 @@ public class ProductDAO {
             System.out.println(ErrorMessage.ERROR_WHILE_REGISTER);
         }
         return 0;
+    }
+
+    public ResultSet productDetails() {
+        ResultSet res1 = null;
+        try {
+            String ProductData = SqlQueries.SELECT_ALL_PRODUCTS;
+            Statement userData = conn.createStatement();
+            // Execute the query and get the result set
+            res1 = userData.executeQuery(ProductData);
+        } catch (SQLException e) {
+            System.out.println(ErrorMessage.ERROR_IN_SHOWING_PRODUCT);
+        }
+        return res1; // Return the result set (can be null if an error occurred)
     }
 
 }
