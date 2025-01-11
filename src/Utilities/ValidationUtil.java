@@ -15,23 +15,21 @@ public class ValidationUtil {
     }
 
     public boolean validateEmailId(String emailId) {
-        if (emailId == null || !emailId.matches("^[A-Za-z0-9+_.-]+@(.+)$"))
-        {
+        if (emailId == null || !emailId.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_EMAIL);
         } else {
             return true;
         }
     }
-    
+
     public boolean validatePassword(String password) {
         if (password == null || !password.matches("^(?=.*[A-Z])(?=.*\\d).{8,}$")) {
-            throw new IllegalArgumentException(
-                    ErrorMessage.INVALID_PASSWORD);
+            throw new IllegalArgumentException(ErrorMessage.INVALID_PASSWORD);
         } else {
             return true;
         }
     }
-    
+
     public boolean validateGender(char gender) {
         if (gender != 'M' && gender != 'F' && gender != 'O') {
             throw new IllegalArgumentException(ErrorMessage.INVALID_GENDER);
@@ -39,20 +37,28 @@ public class ValidationUtil {
             return true;
         }
     }
-    
+
     public boolean validateAge(int age) {
         if (age <= 0 || age > 120) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_AGE);
         } else {
             return true;
         }
-    }  
+    }
+
     public boolean validatePhoneNumber(String phoneNumber) {
         if (phoneNumber == null || !phoneNumber.matches("^\\d{10}$")) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_PHONE_NUMBER);
         } else {
             return true;
         }
+    }
+
+    public int validateQuantity(int Quantity) {
+        if (Quantity < 0) {
+            return Quantity = 1;
+        }
+        return 1;
     }
 
 
@@ -71,18 +77,8 @@ public class ValidationUtil {
             return false;
         }
     }
-
-    public int validateQuantity(int Quantity)
-    {
-        if (Quantity < 0) {
-            return Quantity = 1;
-        }
-        return Quantity;
-        
-    }
-
-    
+  
     
 
-    
+
 }
