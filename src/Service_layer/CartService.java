@@ -13,45 +13,31 @@ import java.sql.SQLException;
 
 public class CartService {
     private static final Connection conn = DBConnection.connect();
-<<<<<<< HEAD
-    private final static ValidationUtil validation = new ValidationUtil();
+    private static final ValidationUtil validation = new ValidationUtil();
 
     // Method to add a product to the cart
-    public static void addCart(int productId, int Quantity) {
-        if (validation.validateQuantity(Quantity)) {
-            CartDAO.addCart(productId, Quantity);  // Call CartDAO to add the product to the cart
-=======
-    private static final ValidationUtil validation = new ValidationUtil();
-    private static final CartDAO cart = new CartDAO();
-
-    public static void addCart(int productId, int Quantity) {
-        if (validation.validateQuantity(Quantity)) {
-            cart.addCart(productId, Quantity);
->>>>>>> 7ef3d048aadd1f64b1af733b8497f0ce66d89e37
+    public static void addCart(int productId, int quantity) {
+        if (validation.validateQuantity(quantity)) {
+            CartDAO.addCart(productId, quantity);
         } else {
             System.out.println(ErrorMessage.ERROR_WHILE_ADDING_PRODUCT_IN_CART);
         }
     }
 
-<<<<<<< HEAD
     // Method to display items in the cart
-=======
->>>>>>> 7ef3d048aadd1f64b1af733b8497f0ce66d89e37
     public void displayCartItems() {
         try (conn) {
             assert conn != null;
             PreparedStatement preparedStatement = conn.prepareStatement(SqlQueries.SHOW_CART_PRODUCTS);
             ResultSet res = preparedStatement.executeQuery();
             while (res.next()) {
-                int CartId = res.getInt("CartId");
-                String ProductId = res.getString("ProductId");
-                String Quantity = res.getString("Quantity");
-                int PriceAtAdd = res.getInt("PriceAtAdd");
-                double AddedAt = res.getDouble("AddedAt");
+                int cartId = res.getInt("CartId");
+                String productId = res.getString("ProductId");
+                String quantity = res.getString("Quantity");
+                int priceAtAdd = res.getInt("PriceAtAdd");
+                double addedAt = res.getDouble("AddedAt");
 
-                System.out.println("CartId: " + CartId + ", ProductId: " + ProductId +
-                        ", ProductDescription: " + Quantity + ", PriceAtAdd: " + PriceAtAdd +
-                        ", AddedAt: " + AddedAt);
+                System.out.println("CartId: " + cartId + ", ProductId: " + productId + ", Quantity: " + quantity + ", PriceAtAdd: " + priceAtAdd + ", AddedAt: " + addedAt);
             }
         } catch (SQLException e) {
             System.out.println(ErrorMessage.ERROR_WHILE_DISPLAYING_PRODUCT_IN_CART + e);
