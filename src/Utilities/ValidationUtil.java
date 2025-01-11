@@ -1,7 +1,5 @@
 package Utilities;
 
-import java.sql.ResultSet;
-
 import Utilities.Constants.ErrorMessage;
 
 public class ValidationUtil {

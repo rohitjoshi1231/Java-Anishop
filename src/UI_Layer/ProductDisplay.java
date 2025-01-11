@@ -1,7 +1,6 @@
 package UI_Layer;
 
 import Service_layer.ProductService;
-import Utilities.ValidationUtil;
 
 public class ProductDisplay {
     public static void main(String[] args) {

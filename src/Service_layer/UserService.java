@@ -3,8 +3,6 @@ package Service_layer;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.swing.text.Utilities;
-
 import DAO.UserDAO;
 import Utilities.ValidationUtil;
 import Utilities.Constants.ErrorMessage;
