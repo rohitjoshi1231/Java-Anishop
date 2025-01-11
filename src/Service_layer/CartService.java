@@ -1,5 +1,12 @@
 package Service_layer;
 
+<<<<<<< HEAD
+public class CartService {
+    public static int addCart(int productId, int Quantity) {
+
+    }
+
+=======
 import Utilities.DBConnection;
 import Utilities.ValidationUtil;
 
@@ -49,5 +56,6 @@ public class CartService {
             System.out.println(ErrorMessage.ERROR_WHILE_DISPLAYING_PRODUCT_IN_CART + e);
         }
 }
+>>>>>>> fb138f2d9a1ba756c553217ed8eb84711db4f929
 
 }

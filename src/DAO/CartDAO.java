@@ -8,7 +8,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+<<<<<<< HEAD
+=======
 
+>>>>>>> fb138f2d9a1ba756c553217ed8eb84711db4f929
 
 public class CartDAO {
     private static final Connection conn = DBConnection.connect();
@@ -26,8 +29,13 @@ public class CartDAO {
         return res1; // Return the result set (can be null if an error occurred)
     }
 
+<<<<<<< HEAD
+    public static int addCart(int productId, int Quantity) {
+        try (Connection conn = DBConnection.connect()) {
+=======
     public int addCart(int productId, int Quantity) {
         try (conn) {
+>>>>>>> fb138f2d9a1ba756c553217ed8eb84711db4f929
             assert conn != null;
             ResultSet productDetails = showSelectedProduct(productId);
             PreparedStatement preparedStatement = conn.prepareStatement(SqlQueries.INSERT_CART);

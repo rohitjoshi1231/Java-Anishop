@@ -1,10 +1,10 @@
 package DAO;
 
-import java.sql.*;
-
 import Utilities.Constants.ErrorMessage;
-import Utilities.DBConnection;
 import Utilities.Constants.SqlQueries;
+import Utilities.DBConnection;
+
+import java.sql.*;
 
 public class UserDAO {
 

@@ -4,15 +4,12 @@ import Utilities.Constants.ErrorMessage;
 import Utilities.Constants.SqlQueries;
 import Utilities.DBConnection;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class ProductDAO {
 
     private final Connection conn = DBConnection.connect();
+
     public static int addProduct(String productName, String productDescription, int productStock, double productPrice) {
 
         try (Connection conn = DBConnection.connect()) {

@@ -1,16 +1,23 @@
 package Service_layer;
 
+import DAO.UserDAO;
+import Utilities.Constants.ErrorMessage;
+import Utilities.ValidationUtil;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+<<<<<<< HEAD
 import DAO.UserDAO;
 import Utilities.ValidationUtil;
 import Utilities.Constants.ErrorMessage;
 
+=======
+>>>>>>> a2519c7dec2874deac67c76f0c4e8fab28096535
 public class UserService {
     private final ValidationUtil validation = new ValidationUtil();
     private final UserDAO userDAO = new UserDAO();
-    
+
 
     public void registerUser(
             String emailId,
@@ -27,7 +34,7 @@ public class UserService {
         }
 
     }
-    
+
     // public UserService(String emailId, String password, String name, char gender, int age, String phoneNumber) {
     //     this.emailId = emailId;
     //     this.password = password;
@@ -37,7 +44,7 @@ public class UserService {
     //     this.phoneNumber = phoneNumber;
     // }
 
-    public void loginUser(String emailId , String password) {
+    public void loginUser(String emailId, String password) {
         UserDAO userDAO = new UserDAO();
         ResultSet res1 = null; // result set ki value
         try {
@@ -58,12 +65,12 @@ public class UserService {
 
             // }
 
-            String fetchedEmailId = "" ;
+            String fetchedEmailId = "";
             String fetchedPassword = "";
-                     
+
             while (res1.next()) {
-            fetchedEmailId = res1.getString("EmailId");
-            fetchedPassword = res1.getString("Password");
+                fetchedEmailId = res1.getString("EmailId");
+                fetchedPassword = res1.getString("Password");
             }
 
             if (fetchedEmailId.equals(emailId) && fetchedPassword.equals(password)) {
