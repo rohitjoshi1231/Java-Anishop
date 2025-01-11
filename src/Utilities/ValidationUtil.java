@@ -77,8 +77,21 @@ public class ValidationUtil {
             return false;
         }
     }
-  
-    
+
+    public boolean validateStockAndPrice(int stock, double price) {
+        // Validation rules:
+        // Stock must be greater than or equal to 0
+        // Price must be greater than 0
+        if (stock < 0) {
+            System.out.println("Invalid stock: must be 0 or greater.");
+            return false;
+        }
+        if (price <= 0) {
+            System.out.println("Invalid price: must be greater than 0.");
+            return false;
+        }
+        return true; // Valid stock and price
+    }
 
 
 }
