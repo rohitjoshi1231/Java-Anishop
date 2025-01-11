@@ -8,10 +8,6 @@ public class ErrorMessage {
     public static final String INVALID_AGE = "Age must be a positive number and less than 120.";
     public static final String INVALID_PHONE_NUMBER = "Phone number must be exactly 10 digits.";
     public static final String ERROR_WHILE_REGISTER = "Error while registering the user.";
-<<<<<<< HEAD
     public static final String INVALID_PRODUCT = "Enter Correctly !! Fields are not valid";
-
-=======
     public static final String ERROR_WHILE_LOGIN = "Incorrect credentials";
->>>>>>> 68c82e3af2475b14d78767500c8cfc849e41e11c
 }
