@@ -13,18 +13,30 @@ import java.sql.SQLException;
 
 public class CartService {
     private static final Connection conn = DBConnection.connect();
+<<<<<<< HEAD
     private final static ValidationUtil validation = new ValidationUtil();
 
     // Method to add a product to the cart
     public static void addCart(int productId, int Quantity) {
         if (validation.validateQuantity(Quantity)) {
             CartDAO.addCart(productId, Quantity);  // Call CartDAO to add the product to the cart
+=======
+    private static final ValidationUtil validation = new ValidationUtil();
+    private static final CartDAO cart = new CartDAO();
+
+    public static void addCart(int productId, int Quantity) {
+        if (validation.validateQuantity(Quantity)) {
+            cart.addCart(productId, Quantity);
+>>>>>>> 7ef3d048aadd1f64b1af733b8497f0ce66d89e37
         } else {
             System.out.println(ErrorMessage.ERROR_WHILE_ADDING_PRODUCT_IN_CART);
         }
     }
 
+<<<<<<< HEAD
     // Method to display items in the cart
+=======
+>>>>>>> 7ef3d048aadd1f64b1af733b8497f0ce66d89e37
     public void displayCartItems() {
         try (conn) {
             assert conn != null;

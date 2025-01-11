@@ -11,7 +11,6 @@ public class UserService {
     private final ValidationUtil validation = new ValidationUtil();
     private final UserDAO userDAO = new UserDAO();
 
-
     public void registerUser(
             String emailId,
             String password,
@@ -25,21 +24,10 @@ public class UserService {
         } else {
             System.out.println("Please Enter correct details !");
         }
-
     }
 
-    // public UserService(String emailId, String password, String name, char gender, int age, String phoneNumber) {
-    //     this.emailId = emailId;
-    //     this.password = password;
-    //     this.name = name;
-    //     this.gender = gender;
-    //     this.age = age;
-    //     this.phoneNumber = phoneNumber;
-    // }
-
     public void loginUser(String emailId, String password) {
-        UserDAO userDAO = new UserDAO();
-        ResultSet res1 = null; // result set ki value
+        ResultSet res1 = null;
         try {
             // Fetch user details
             res1 = userDAO.loginUser();
@@ -47,16 +35,6 @@ public class UserService {
                 System.out.println("No data found or an error occurred while fetching user details.");
                 return;
             }
-            // Iterate through the result set
-            // while (res1.next()) {
-            //     String emailId = res1.getString("EmailId");
-            //     String password = res1.getString("Password");
-            //     System.out.println("EmailId: " + emailId + ", Password: " + password);
-            //     if (emailId.equals(emailId)) {
-            //         System.out.println("Match found for: " + emailId);
-            //     }
-
-            // }
 
             String fetchedEmailId = "";
             String fetchedPassword = "";
@@ -84,5 +62,4 @@ public class UserService {
             }
         }
     }
-
 }
