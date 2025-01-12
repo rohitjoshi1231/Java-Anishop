@@ -6,6 +6,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 class HomePageUi {
+
+    
     int ProductId;
     String ProductName;
     String ProductDescription;
@@ -147,6 +149,8 @@ class HomePageUi {
 
         // Add ActionListeners for each button
         homeButton.addActionListener(e -> cardLayout.show(contentPanel, "Home"));
+
+        
         searchButton.addActionListener(e -> cardLayout.show(contentPanel, "Cart"));
         profileButton.addActionListener(e -> JOptionPane.showMessageDialog(frame, "Profile Button Clicked"));
 

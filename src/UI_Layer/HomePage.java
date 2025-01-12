@@ -10,8 +10,11 @@ import java.sql.SQLException;
 public class HomePage {
 
     private static HomePageUi home = null;
+    
 
     public static void main(String[] args) {
+
+        
 
         // Future integration: Fetch and display product data
 

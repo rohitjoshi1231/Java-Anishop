@@ -76,7 +76,11 @@ class LoginUi {
 
                 // If login is successful, show success message
                 JOptionPane.showMessageDialog(panel, "Login successful! :) ");
+                cardLayout.show(mainPanel, "Home");
             } catch (Exception ex) {
+                // Debugging print to ensure exception is caught
+                System.out.println("Error caught: " + ex.getMessage());
+
                 // Show error message if login fails
                 JOptionPane.showMessageDialog(panel, "Login Failed: " + ex.getMessage(), "Error",
                         JOptionPane.ERROR_MESSAGE);
