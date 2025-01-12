@@ -147,6 +147,9 @@ class UserRegistrationUi {
                 // If registration is successful, show success message
                 JOptionPane.showMessageDialog(panel, "Registration successful.. :) ");
 
+
+
+
                 // Switch to Log in UI after successful registration
                 cardLayout.show(mainPanel, "Login");
             } catch (Exception ex) {
