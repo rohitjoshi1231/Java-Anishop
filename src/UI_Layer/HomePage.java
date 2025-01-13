@@ -10,7 +10,6 @@ import java.sql.SQLException;
 public class HomePage {
 
     private static HomePageUi home = null;
-    
 
     public static void main(String[] args) {
 
@@ -27,8 +26,11 @@ public class HomePage {
                 int productStock = data.getInt("ProductStock");
                 double productPrice = data.getDouble("ProductPrice");
                 home = new HomePageUi(productId, productName, productDescription, productStock, productPrice);
-                System.out.println("ProductID: " + productId + ", ProductName: " + productName + ", ProductDescription: " + productDescription + ", ProductStock: " + productStock + ", ProductPrice: " + productPrice);
+                System.out.println("ProductID: " + productId + ", ProductName: " + productName
+                        + ", ProductDescription: " + productDescription + ", ProductStock: " + productStock
+                        + ", ProductPrice: " + productPrice);
             }
+            
         } catch (SQLException e) {
             System.out.println("Error: " + e);
         } finally {

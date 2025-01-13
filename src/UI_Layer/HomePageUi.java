@@ -7,7 +7,6 @@ import java.awt.event.MouseEvent;
 
 class HomePageUi {
 
-    
     int ProductId;
     String ProductName;
     String ProductDescription;
@@ -135,7 +134,6 @@ class HomePageUi {
         return cartPanel;
     }
 
-
     private void setupBottomNavigation(JFrame frame, CardLayout cardLayout, JPanel contentPanel) {
         // Create a panel for bottom navigation
         JPanel bottomNavPanel = new JPanel();
@@ -150,7 +148,6 @@ class HomePageUi {
         // Add ActionListeners for each button
         homeButton.addActionListener(e -> cardLayout.show(contentPanel, "Home"));
 
-        
         searchButton.addActionListener(e -> cardLayout.show(contentPanel, "Cart"));
         profileButton.addActionListener(e -> JOptionPane.showMessageDialog(frame, "Profile Button Clicked"));
 
@@ -163,3 +160,178 @@ class HomePageUi {
         frame.add(bottomNavPanel, BorderLayout.SOUTH);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+// package UI_Layer;
+
+// import Service_layer.ProductService;
+
+// import javax.swing.*;
+// import java.awt.*;
+// import java.awt.event.MouseAdapter;
+// import java.awt.event.MouseEvent;
+// import java.sql.ResultSet;
+// import java.sql.SQLException;
+
+// public class HomePageUi {
+
+//     private ProductService productService; // Updated to fetch products
+
+//     public HomePageUi() {
+//         productService = new ProductService(); // Initialize productService
+//     }
+
+//     public void setupHomePageLayout(JFrame frame) {
+//         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+//         // Use CardLayout to manage different panels
+//         CardLayout cardLayout = new CardLayout();
+//         JPanel contentPanel = new JPanel(cardLayout);
+
+//         // Create panels for different pages
+//         JScrollPane homePanel = createProductPanel(frame); // Dynamically load products
+//         JPanel cartPanel = createCartPanel();
+//         JPanel profilePanel = createProfilePanel();
+
+//         // Add panels to CardLayout
+//         contentPanel.add(homePanel, "Home");
+//         contentPanel.add(cartPanel, "Cart");
+//         contentPanel.add(profilePanel, "Profile");
+
+//         // Add the content panel to the frame
+//         frame.add(contentPanel, BorderLayout.CENTER);
+
+//         // Add the bottom navigation bar
+//         setupBottomNavigation(cardLayout, contentPanel);
+
+//         // Show the home panel by default
+//         cardLayout.show(contentPanel, "Home");
+
+//         // Frame properties
+//         frame.setSize(800, 600);
+//         frame.setVisible(true);
+//     }
+
+//     private JScrollPane createProductPanel(JFrame frame) {
+//         JPanel panel = new JPanel();
+//         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)); // Display products line-by-line
+//         panel.setBackground(Color.BLACK);
+
+//         try {
+//             // Fetch products from the database
+//             ResultSet rs = productService.getAllProducts();
+//             while (rs.next()) {
+//                 String productName = rs.getString("productName");
+//                 String productDescription = rs.getString("product_description");
+//                 int productStock = rs.getInt("product_stock");
+//                 double productPrice = rs.getDouble("product_price");
+
+//                 // Product display components
+//                 JLabel nameLabel = new JLabel(productName);
+//                 JLabel descriptionLabel = new JLabel("Description: " + productDescription);
+
+//                 nameLabel.setFont(new Font("Arial", Font.BOLD, 18));
+//                 nameLabel.setForeground(Color.WHITE);
+//                 nameLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+//                 descriptionLabel.setFont(new Font("Arial", Font.ITALIC, 14));
+//                 descriptionLabel.setForeground(Color.LIGHT_GRAY);
+
+//                 // Mouse listener for product click
+//                 nameLabel.addMouseListener(new MouseAdapter() {
+//                     @Override
+//                     public void mouseClicked(MouseEvent e) {
+//                         JOptionPane.showMessageDialog(frame, "Product clicked: " + nameLabel.getText());
+//                     }
+//                 });
+
+//                 // Add labels and spacing between them
+//                 panel.add(nameLabel);
+//                 panel.add(descriptionLabel);
+//                 panel.add(Box.createRigidArea(new Dimension(0, 15))); // Add spacing between products
+//             }
+//         } catch (SQLException e) {
+//             e.printStackTrace(); // Handle any database errors
+//         }
+
+//         // Wrap the panel in a JScrollPane
+//         JScrollPane scrollPane = new JScrollPane(panel);
+//         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+//         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+//         return scrollPane;
+//     }
+
+//     private JPanel createCartPanel() {
+//         JPanel cartPanel = new JPanel(new BorderLayout());
+//         cartPanel.setBackground(Color.WHITE);
+
+//         cartPanel.add(new JLabel("Your Cart", SwingConstants.CENTER), BorderLayout.NORTH);
+
+//         JPanel contentPanel = new JPanel();
+//         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+//         contentPanel.setBackground(Color.WHITE);
+
+//         contentPanel.add(new JLabel("Product 1"));
+//         contentPanel.add(new JLabel("Product 2"));
+
+//         JScrollPane scrollPane = new JScrollPane(contentPanel);
+//         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+//         cartPanel.add(scrollPane, BorderLayout.CENTER);
+
+//         JButton buy = new JButton("Checkout Items");
+//         cartPanel.add(buy, BorderLayout.SOUTH);
+
+//         return cartPanel;
+//     }
+
+//     private JPanel createProfilePanel() {
+//         JPanel profilePanel = new JPanel(new BorderLayout());
+//         profilePanel.setBackground(Color.WHITE);
+
+//         JLabel label = new JLabel("Profile Page", SwingConstants.CENTER);
+//         label.setFont(new Font("Arial", Font.BOLD, 24));
+//         profilePanel.add(label, BorderLayout.CENTER);
+
+//         return profilePanel;
+//     }
+
+//     private void setupBottomNavigation(CardLayout cardLayout, JPanel contentPanel) {
+//         JPanel bottomNavPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+//         bottomNavPanel.setBackground(Color.BLACK);
+
+//         JButton homeButton = new JButton("Home");
+//         JButton cartButton = new JButton("Cart");
+//         JButton profileButton = new JButton("Profile");
+
+//         homeButton.addActionListener(e -> cardLayout.show(contentPanel, "Home"));
+//         cartButton.addActionListener(e -> cardLayout.show(contentPanel, "Cart"));
+//         profileButton.addActionListener(e -> cardLayout.show(contentPanel, "Profile"));
+
+//         bottomNavPanel.add(homeButton);
+//         bottomNavPanel.add(cartButton);
+//         bottomNavPanel.add(profileButton);
+
+//         contentPanel.getParent().add(bottomNavPanel, BorderLayout.SOUTH);
+//     }
+
+//     public static void main(String[] args) {
+//         SwingUtilities.invokeLater(() -> {
+//             JFrame frame = new JFrame("Home Page UI");
+//             HomePageUi homePageUi = new HomePageUi();
+//             homePageUi.setupHomePageLayout(frame);
+//         });
+//     }
+// }
