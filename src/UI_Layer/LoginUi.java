@@ -78,7 +78,7 @@ class LoginUi {
             try {
                 // Call the service layer to authenticate the user
 
-                userService.loginUser(emailId, password);
+                //userService.loginUser(emailId, password);
 
 
                 // If login is successful, show success message
