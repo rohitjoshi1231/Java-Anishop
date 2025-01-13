@@ -3,57 +3,39 @@ package UI_Layer;
 import Service_layer.HomePageService;
 
 import javax.swing.*;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomePage {
 
-    private static HomePageUi home = null;
-
+    // Main method to test the home page UI
     public static void main(String[] args) {
+        // Fetch the product data from the database
+        ResultSet res = HomePageService.showProducts();
 
-        
-
-        // Future integration: Fetch and display product data
-
-        ResultSet data = HomePageService.showProducts();
+        // Convert ResultSet to List of Product objects
+        List<Product> products = new ArrayList<>();
         try {
-            while (data != null && data.next()) {
-                int productId = data.getInt("ProductId");
-                String productName = data.getString("ProductName");
-                String productDescription = data.getString("ProductDescription");
-                int productStock = data.getInt("ProductStock");
-                double productPrice = data.getDouble("ProductPrice");
-                home = new HomePageUi(productId, productName, productDescription, productStock, productPrice);
-                System.out.println("ProductID: " + productId + ", ProductName: " + productName
-                        + ", ProductDescription: " + productDescription + ", ProductStock: " + productStock
-                        + ", ProductPrice: " + productPrice);
+            while (res.next()) {
+                int productId = res.getInt("productId");
+                String productName = res.getString("productName");
+                String productDescription = res.getString("productDescription");
+                int productStock = res.getInt("productStock");
+                double productPrice = res.getDouble("productPrice");
+
+                // Add the product to the list
+                products.add(new Product(productId, productName, productDescription, productStock, productPrice));
             }
-            
         } catch (SQLException e) {
-            System.out.println("Error: " + e);
-        } finally {
-            try {
-                if (data != null) {
-                    data.getStatement().close();
-                    data.close();
-                }
-            } catch (SQLException e) {
-                System.out.println("Error: " + e);
-            }
+            e.printStackTrace();
         }
 
-
-        // Create and configure the main JFrame
-        JFrame frame = new JFrame("Home");
-        home.setupHomePageLayout(frame);
-        // Display the frame
-        frame.setSize(400, 700);
+        // Create HomePageUi with dynamic product data
+        JFrame frame = new JFrame("Home Page");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(500, 700);
+        frame.add(new HomePageUi(products).createHomePanel());  // Add the home panel with dynamic products
         frame.setVisible(true);
     }
 }
-
-
-
-
