@@ -1,41 +1,63 @@
-package UI_Layer;
+// package UI_Layer;
 
-import Service_layer.HomePageService;
+// import Service_layer.HomePageService;
 
-import javax.swing.*;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+// import javax.swing.*;
+// import java.sql.*;
+// import java.util.ArrayList;
+// import java.util.List;
 
-public class HomePage {
+// public class HomePage {
 
-    // Main method to test the home page UI
-    public static void main(String[] args) {
-        // Fetch the product data from the database
-        ResultSet res = HomePageService.showProducts();
+//     // public static void main(String[] args) {
+//     //     // Fetch the product data from the database
+//     //     ResultSet res = null;
+//     //     List<Product> products = new ArrayList<>();
 
-        // Convert ResultSet to List of Product objects
-        List<Product> products = new ArrayList<>();
-        try {
-            while (res.next()) {
-                int productId = res.getInt("productId");
-                String productName = res.getString("productName");
-                String productDescription = res.getString("productDescription");
-                int productStock = res.getInt("productStock");
-                double productPrice = res.getDouble("productPrice");
+//     //     try {
+//     //         res = HomePageService.showProducts();
 
-                // Add the product to the list
-                products.add(new Product(productId, productName, productDescription, productStock, productPrice));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+//     //         if (res == null) {
+//     //             System.out.println("No data returned from the database.");
+//     //         } else {
+//     //             // Convert ResultSet to List of Product objects
+//     //             while (res.next()) {
+//     //                 int productId = res.getInt("productId");
+//     //                 String productName = res.getString("productName");
+//     //                 String productDescription = res.getString("productDescription");
+//     //                 int productStock = res.getInt("productStock");
+//     //                 double productPrice = res.getDouble("productPrice");
 
-        // Create HomePageUi with dynamic product data
-        JFrame frame = new JFrame("Home Page");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(500, 700);
-        frame.add(new HomePageUi(products).createHomePanel());  // Add the home panel with dynamic products
-        frame.setVisible(true);
-    }
-}
+//     //                 // Add the product to the list
+//     //                 products.add(new Product(productId, productName, productDescription, productStock, productPrice));
+//     //             }
+//     //         }
+//     //     } catch (SQLException e) {
+//     //         e.printStackTrace();
+//     //         JOptionPane.showMessageDialog(null, "Error fetching product data: " + e.getMessage(), "Database Error",
+//     //                 JOptionPane.ERROR_MESSAGE);
+//     //     } finally {
+//     //         // Close the ResultSet
+//     //         try {
+//     //             if (res != null) {
+//     //                 res.close();
+//     //             }
+//     //         } catch (SQLException e) {
+//     //             e.printStackTrace();
+//     //         }
+//     //     }
+
+//     //     // Create HomePage UI with dynamic product data
+//     //     SwingUtilities.invokeLater(() -> {
+//     //         JFrame frame = new JFrame("Home Page");
+//     //         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//     //         frame.setSize(500, 700);
+
+//     //         // Pass the product list to HomePageUi
+//     //         HomePageUi homePageUi = new HomePageUi(products);
+//     //         frame.add(homePageUi.createHomePanel());
+
+//     //         frame.setVisible(true);
+//     //     });
+//     // }
+// }

@@ -1,14 +1,17 @@
 package UI_Layer;
 
+import Service_layer.HomePageService;
 import Service_layer.UserService;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-
 
 class LoginUi {
     private final CardLayout cardLayout;
@@ -77,7 +80,7 @@ class LoginUi {
 
             try {
                 // Call the service layer to authenticate the user
-//                userService.loginUser(emailId, password);
+                userService.loginUser(emailId, password);
 
                 // If login is successful, show success message
                 JOptionPane.showMessageDialog(panel, "Login successful! :) ");
@@ -88,7 +91,8 @@ class LoginUi {
                 System.out.println("Error caught: " + ex.getMessage());
 
                 // Show error message if login fails
-                JOptionPane.showMessageDialog(panel, "Login Failed: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(panel, "Login Failed: " + ex.getMessage(), "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -107,128 +111,32 @@ class LoginUi {
         });
     }
 
-
     private void openHomePage(CardLayout cardLayout, JPanel mainPanel) {
-        HomePageUi ui = new HomePageUi(new List<>() {
-            @Override
-            public int size() {
-                return 0;
+        // Fetch dynamic product data
+        List<Product> products = new ArrayList<>();
+        ResultSet res = HomePageService.showProducts();
+
+        try {
+            while (res != null && res.next()) {
+                products.add(new Product(
+                        res.getInt("productId"),
+                        res.getString("productName"),
+                        res.getString("productDescription"),
+                        res.getInt("productStock"),
+                        res.getDouble("productPrice")));
             }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(mainPanel, "Error loading products: " + e.getMessage(),
+                    "Database Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
 
-            @Override
-            public boolean isEmpty() {
-                return false;
-            }
-
-            @Override
-            public boolean contains(Object o) {
-                return false;
-            }
-
-            @Override
-            public Iterator<Product> iterator() {
-                return null;
-            }
-
-            @Override
-            public Object[] toArray() {
-                return new Object[0];
-            }
-
-            @Override
-            public <T> T[] toArray(T[] a) {
-                return null;
-            }
-
-            @Override
-            public boolean add(Product product) {
-                return false;
-            }
-
-            @Override
-            public boolean remove(Object o) {
-                return false;
-            }
-
-            @Override
-            public boolean containsAll(Collection<?> c) {
-                return false;
-            }
-
-            @Override
-            public boolean addAll(Collection<? extends Product> c) {
-                return false;
-            }
-
-            @Override
-            public boolean addAll(int index, Collection<? extends Product> c) {
-                return false;
-            }
-
-            @Override
-            public boolean removeAll(Collection<?> c) {
-                return false;
-            }
-
-            @Override
-            public boolean retainAll(Collection<?> c) {
-                return false;
-            }
-
-            @Override
-            public void clear() {
-
-            }
-
-            @Override
-            public Product get(int index) {
-                return null;
-            }
-
-            @Override
-            public Product set(int index, Product element) {
-                return null;
-            }
-
-            @Override
-            public void add(int index, Product element) {
-
-            }
-
-            @Override
-            public Product remove(int index) {
-                return null;
-            }
-
-            @Override
-            public int indexOf(Object o) {
-                return 0;
-            }
-
-            @Override
-            public int lastIndexOf(Object o) {
-                return 0;
-            }
-
-            @Override
-            public ListIterator<Product> listIterator() {
-                return null;
-            }
-
-            @Override
-            public ListIterator<Product> listIterator(int index) {
-                return null;
-            }
-
-            @Override
-            public List<Product> subList(int fromIndex, int toIndex) {
-                return List.of();
-            }
-        });
+        // Pass products to HomePage UI
+        HomePageUi ui = new HomePageUi(products);
         JPanel homePanel = ui.createHomePanel();
         mainPanel.add(homePanel, "Home");
 
-        // Show the home page immediately after successful login
+        // Show the home page
         cardLayout.show(mainPanel, "Home");
     }
 

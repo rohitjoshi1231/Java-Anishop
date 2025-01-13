@@ -42,7 +42,7 @@ class HomePageUi {
         // Create product listing
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS)); // Layout for content
-        contentPanel.setBackground(Color.LIGHT_GRAY);
+        contentPanel.setBackground(Color.BLACK);
 
         // Add each product to the panel dynamically from the productList
         for (Product product : productList) {
@@ -78,14 +78,15 @@ class HomePageUi {
     private JPanel createProductItemPanel(Product product) {
         JPanel productPanel = new JPanel();
         productPanel.setLayout(new BoxLayout(productPanel, BoxLayout.Y_AXIS)); // Stack components vertically
-        productPanel.setBackground(Color.WHITE);  // Set a solid background color
+        productPanel.setBackground(Color.BLACK);  // Set a solid background color
         productPanel.setPreferredSize(new Dimension(450, 120));
         productPanel.setMaximumSize(new Dimension(450, 120));
         productPanel.setAlignmentX(Component.LEFT_ALIGNMENT); // Align to left
 
         // Add shadow effect to product panel by setting a border with a 3D effect
         productPanel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(0, 0, 0, 100), 5), // Shadow effect
+                // BorderFactory.createLineBorder(new Color(0, 0, 0, 100), 5), // Shadow effect
+                BorderFactory.createLineBorder(Color.lightGray), // Shadow effect
                 BorderFactory.createEmptyBorder(10, 10, 10, 10) // Padding for better view
         ));
 
@@ -99,7 +100,7 @@ class HomePageUi {
         productDescLabel.setFont(new Font("Arial", Font.ITALIC, 14));
         productPriceLabel.setFont(new Font("Arial", Font.PLAIN, 14));
 
-        productNameLabel.setForeground(Color.BLACK);
+        productNameLabel.setForeground(Color.white);
         productDescLabel.setForeground(Color.GRAY);
         productPriceLabel.setForeground(Color.GREEN);
 

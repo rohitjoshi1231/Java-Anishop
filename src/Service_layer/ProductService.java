@@ -1,24 +1,71 @@
+// package Service_layer;
+
+// import DAO.ProductDAO;
+// import Utilities.Constants.ErrorMessage;
+// import Utilities.ValidationUtil;
+
+// public class ProductService {
+//     ValidationUtil validation = new ValidationUtil();
+//     UserService userService = new UserService();
+
+//     public void addProduct(String productName, String productDescription, int productStock, double productPrice) {
+//         boolean isProductValid = validation.validateName(productName) && validation.validateName(productDescription) && validation.validateStockAndPrice(productStock, productPrice);
+
+
+// //        userService.loginUser("admin@anishop.com", "admin");
+
+//         if (isProductValid) {
+//             ProductDAO.addProduct(productName, productDescription, productStock, productPrice);
+//         } else {
+//             System.out.println(ErrorMessage.INVALID_PRODUCT);
+//         }
+//     }
+
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 package Service_layer;
 
 import DAO.ProductDAO;
 import Utilities.Constants.ErrorMessage;
 import Utilities.ValidationUtil;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class ProductService {
     ValidationUtil validation = new ValidationUtil();
-    UserService userService = new UserService();
+    ProductDAO productDAO = new ProductDAO(); // Updated to fetch products from DAO
 
     public void addProduct(String productName, String productDescription, int productStock, double productPrice) {
-        boolean isProductValid = validation.validateName(productName) && validation.validateName(productDescription) && validation.validateStockAndPrice(productStock, productPrice);
-
-
-//        userService.loginUser("admin@anishop.com", "admin");
+        boolean isProductValid = validation.validateName(productName) &&
+                validation.validateName(productDescription) &&
+                validation.validateStockAndPrice(productStock, productPrice);
 
         if (isProductValid) {
-            ProductDAO.addProduct(productName, productDescription, productStock, productPrice);
+            productDAO.addProduct(productName, productDescription, productStock, productPrice);
         } else {
             System.out.println(ErrorMessage.INVALID_PRODUCT);
         }
     }
 
+    // Fetch all products from the database
+    public ResultSet getAllProducts() {
+        return productDAO.productDetails(); // Fetches products from the database
+    }
 }
