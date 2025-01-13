@@ -19,6 +19,7 @@ public class UserMenu {
         JPanel loginPanel = new LoginUi(cardLayout, mainPanel).createLoginPanel();
         mainPanel.add(loginPanel, "Login");
 
+//        Hello
 
         // Set up frame
         frame.setSize(480, 700); // Set the size of the frame
