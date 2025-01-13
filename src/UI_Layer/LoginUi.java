@@ -78,20 +78,19 @@ class LoginUi {
             try {
                 // Call the service layer to authenticate the user
 
-                //userService.loginUser(emailId, password);
-
+//                userService.loginUser(emailId, password);
 
                 // If login is successful, show success message
                 JOptionPane.showMessageDialog(panel, "Login successful! :) ");
-                openHomePage(cardLayout, mainPanel);
+                homePageOpen();
+//                openHomePage(cardLayout, mainPanel);
                 cardLayout.show(mainPanel, "Home");
             } catch (Exception ex) {
                 // Debugging print to ensure exception is caught
                 System.out.println("Error caught: " + ex.getMessage());
 
                 // Show error message if login fails
-                JOptionPane.showMessageDialog(panel, "Login Failed: " + ex.getMessage(), "Error",
-                        JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(panel, "Login Failed: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -110,33 +109,46 @@ class LoginUi {
         });
     }
 
-    private void openHomePage(CardLayout cardLayout, JPanel mainPanel) {
-        // Fetch dynamic product data
-        List<Product> products = new ArrayList<>();
-        ResultSet res = HomePageService.showProducts();
+    public void homePageOpen() {
+        List<Product> sampleProducts = new ArrayList<>();
+        sampleProducts.add(new Product(1, "Product 1", "Description 1", 10, 100.0));
+        sampleProducts.add(new Product(2, "Product 2", "Description 2", 5, 200.0));
+        sampleProducts.add(new Product(3, "Product 3", "Description 3", 15, 150.0));
+        sampleProducts.add(new Product(4, "Product 4", "Description 4", 20, 300.0));
 
-        try {
-            while (res != null && res.next()) {
-                products.add(new Product(
-                        res.getInt("productId"),
-                        res.getString("productName"),
-                        res.getString("productDescription"),
-                        res.getInt("productStock"),
-                        res.getDouble("productPrice")));
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(mainPanel, "Error loading products: " + e.getMessage(),
-                    "Database Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
+        HomePageUi homePageUi = new HomePageUi(sampleProducts);
+        homePageUi.mainPanel = new JPanel(new CardLayout());
+        homePageUi.mainPanel.add(homePageUi.createHomePanel(), "Home");
 
-        // Pass products to HomePage UI
-        HomePageUi ui = new HomePageUi(products);
-        JPanel homePanel = ui.createHomePanel();
-        mainPanel.add(homePanel, "Home");
+        JFrame frame = new JFrame("Shopping App");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setContentPane(homePageUi.mainPanel);
+        frame.setSize(500, 700);
+        frame.setVisible(true);
 
-        // Show the home page
-        cardLayout.show(mainPanel, "Home");
     }
+
+//    private void openHomePage(CardLayout cardLayout, JPanel mainPanel) {
+//        // Fetch dynamic product data
+//        List<Product> products = new ArrayList<>();
+////        ResultSet res = HomePageService.showProducts();
+//
+////        try {
+////            while (res != null && res.next()) {
+////                products.add(new Product(res.getInt("productId"), res.getString("productName"), res.getString("productDescription"), res.getInt("productStock"), res.getDouble("productPrice")));
+////            }
+////        } catch (SQLException e) {
+////            JOptionPane.showMessageDialog(mainPanel, "Error loading products: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+////            e.printStackTrace();
+////        }
+//
+//        // Pass products to HomePage UI
+//        HomePageUi ui = new HomePageUi(products);
+//        JPanel homePanel = ui.createHomePanel();
+//        mainPanel.add(homePanel, "Home");
+//
+//        // Show the home page
+//        cardLayout.show(mainPanel, "Home");
+//    }
 
 }

@@ -2,9 +2,12 @@ package UI_Layer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;  // Import java.util.List for generics
+import java.util.ArrayList;
+import java.util.List;
 
 // Product class to represent product details
 class Product {
@@ -14,7 +17,6 @@ class Product {
     int productStock;
     double productPrice;
 
-    // Constructor to initialize the product data
     Product(int productId, String productName, String productDescription, int productStock, double productPrice) {
         this.productId = productId;
         this.productName = productName;
@@ -28,36 +30,90 @@ class Product {
 
 // HomePageUi class to create the user interface for the home page
 class HomePageUi {
-    List<Product> productList;  // List to hold dynamic products
-    List<Product> cartList;
+    List<Product> productList;
+    List<Product> cartList = new ArrayList<>();
     JPanel mainPanel;
 
-    // Constructor to accept the product list
     HomePageUi(List<Product> productList) {
         this.productList = productList;
+        // Add sample products to the cart for demonstration
+        cartList.add(new Product(101, "Sample Cart Product 1", "Cart Description 1", 5, 99.99));
+        cartList.add(new Product(102, "Sample Cart Product 2", "Cart Description 2", 3, 149.99));
     }
 
-
-    // Method to create the cart panel
     public JPanel createCartPanel() {
         JPanel cartPanel = new JPanel();
-        cartPanel.setLayout(new BoxLayout(cartPanel, BoxLayout.Y_AXIS));
+        cartPanel.setLayout(new BorderLayout());
         cartPanel.setBackground(Color.BLACK);
+
+        JLabel titleLabel = new JLabel("Your Cart");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        cartPanel.add(titleLabel, BorderLayout.NORTH);
+
+        JPanel itemsPanel = new JPanel();
+        itemsPanel.setLayout(new BoxLayout(itemsPanel, BoxLayout.Y_AXIS));
+        itemsPanel.setBackground(Color.BLACK);
 
         if (cartList.isEmpty()) {
             JLabel emptyLabel = new JLabel("Cart is empty");
             emptyLabel.setForeground(Color.WHITE);
             emptyLabel.setFont(new Font("Arial", Font.BOLD, 18));
             emptyLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-            cartPanel.add(emptyLabel);
+            itemsPanel.add(emptyLabel);
         } else {
             for (Product product : cartList) {
                 JPanel productPanel = createProductItemPanel(product);
-                cartPanel.add(productPanel);
+                itemsPanel.add(productPanel);
             }
         }
 
+        JScrollPane scrollPane = new JScrollPane(itemsPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+
+        cartPanel.add(scrollPane, BorderLayout.CENTER);
+        cartPanel.add(createBottomNavPanel(), BorderLayout.SOUTH);
+
         return cartPanel;
+    }
+
+    public JPanel createProfilePanel() {
+        JPanel profilePanel = new JPanel();
+        profilePanel.setLayout(new BorderLayout());
+        profilePanel.setBackground(Color.BLACK);
+
+        JLabel titleLabel = new JLabel("Your Profile");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        profilePanel.add(titleLabel, BorderLayout.NORTH);
+
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+        contentPanel.setBackground(Color.BLACK);
+
+        JLabel nameLabel = new JLabel("Name: John Doe");
+        JLabel emailLabel = new JLabel("Email: johndoe@example.com");
+        JLabel membershipLabel = new JLabel("Membership: Premium");
+
+        nameLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        emailLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        membershipLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+
+        nameLabel.setForeground(Color.WHITE);
+        emailLabel.setForeground(Color.WHITE);
+        membershipLabel.setForeground(Color.WHITE);
+
+        contentPanel.add(nameLabel);
+        contentPanel.add(emailLabel);
+        contentPanel.add(membershipLabel);
+
+        profilePanel.add(contentPanel, BorderLayout.CENTER);
+        profilePanel.add(createBottomNavPanel(), BorderLayout.SOUTH);
+
+        return profilePanel;
     }
 
     private void switchPanel(JPanel newPanel) {
@@ -67,97 +123,87 @@ class HomePageUi {
         mainPanel.repaint();
     }
 
-    // Method to create the home page panel
     public JPanel createHomePanel() {
         JPanel homePanel = new JPanel();
         homePanel.setLayout(new BorderLayout());
-        homePanel.setSize(480, 700); // Set the size to 480x700
+        homePanel.setBackground(Color.BLACK);
 
-        // Create product listing
+        JLabel titleLabel = new JLabel("Available Products");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        homePanel.add(titleLabel, BorderLayout.NORTH);
+
         JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS)); // Layout for content
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBackground(Color.BLACK);
 
-        // Add each product to the panel dynamically from the productList
         for (Product product : productList) {
             JPanel productPanel = createProductItemPanel(product);
-            contentPanel.add(productPanel); // Add product to content panel
+            contentPanel.add(productPanel);
         }
 
-        // Wrap the content panel in a JScrollPane to make it scrollable
         JScrollPane scrollPane = new JScrollPane(contentPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
-        // Create and add a bottom navigation panel
+        homePanel.add(scrollPane, BorderLayout.CENTER);
+        homePanel.add(createBottomNavPanel(), BorderLayout.SOUTH);
+
+        return homePanel;
+    }
+
+    private JPanel createBottomNavPanel() {
         JPanel bottomNavPanel = new JPanel();
-        bottomNavPanel.setLayout(new FlowLayout(FlowLayout.CENTER)); // Centered navigation buttons
-        bottomNavPanel.setBackground(Color.BLACK);
+        bottomNavPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        bottomNavPanel.setBackground(Color.DARK_GRAY);
 
         JButton homeButton = new JButton("Home");
         JButton cartButton = new JButton("Cart");
         JButton profileButton = new JButton("Profile");
 
-        // Navigation actions
         homeButton.addActionListener(e -> switchPanel(createHomePanel()));
         cartButton.addActionListener(e -> switchPanel(createCartPanel()));
-        profileButton.addActionListener(e -> JOptionPane.showMessageDialog(null, "Profile section coming soon!"));
-
+        profileButton.addActionListener(e -> switchPanel(createProfilePanel()));
 
         bottomNavPanel.add(homeButton);
         bottomNavPanel.add(cartButton);
         bottomNavPanel.add(profileButton);
 
-
-        // Add scrollable content and bottom navigation panel to the home page
-        homePanel.add(scrollPane, BorderLayout.CENTER);
-        homePanel.add(bottomNavPanel, BorderLayout.SOUTH);
-
-        return homePanel;
+        return bottomNavPanel;
     }
 
-    // Method to create the product item panel for each product
     private JPanel createProductItemPanel(Product product) {
         JPanel productPanel = new JPanel();
-        productPanel.setLayout(new BoxLayout(productPanel, BoxLayout.Y_AXIS)); // Stack components vertically
-        productPanel.setBackground(Color.BLACK);  // Set a solid background color
+        productPanel.setLayout(new BoxLayout(productPanel, BoxLayout.Y_AXIS));
+        productPanel.setBackground(Color.BLACK);
         productPanel.setPreferredSize(new Dimension(450, 120));
         productPanel.setMaximumSize(new Dimension(450, 120));
-        productPanel.setAlignmentX(Component.LEFT_ALIGNMENT); // Align to left
+        productPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 
-        // Add shadow effect to product panel by setting a border with a 3D effect
-        productPanel.setBorder(BorderFactory.createCompoundBorder(
-                // BorderFactory.createLineBorder(new Color(0, 0, 0, 100), 5), // Shadow effect
-                BorderFactory.createLineBorder(Color.lightGray), // Shadow effect
-                BorderFactory.createEmptyBorder(10, 10, 10, 10) // Padding for better view
-        ));
-
-        // Create labels for product name, description, and price
         JLabel productNameLabel = new JLabel("Name: " + product.productName);
-        JLabel productDescLabel = new JLabel("Desc: " + product.productDescription);
+        JLabel productDescLabel = new JLabel("Description: " + product.productDescription);
         JLabel productPriceLabel = new JLabel("Price: ₹" + product.productPrice);
 
-        // Styling
         productNameLabel.setFont(new Font("Arial", Font.BOLD, 16));
         productDescLabel.setFont(new Font("Arial", Font.ITALIC, 14));
         productPriceLabel.setFont(new Font("Arial", Font.PLAIN, 14));
 
-        productNameLabel.setForeground(Color.white);
+        productNameLabel.setForeground(Color.WHITE);
         productDescLabel.setForeground(Color.GRAY);
         productPriceLabel.setForeground(Color.GREEN);
 
-        // Add a mouse listener to handle click events (for product details view)
-        productPanel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                // Action to perform when product is clicked
-                JOptionPane.showMessageDialog(null, product.productName + " clicked. Price: ₹" + product.productPrice);
-            }
-        });
-
-        // Add the labels to the product panel
         productPanel.add(productNameLabel);
         productPanel.add(productDescLabel);
         productPanel.add(productPriceLabel);
+
+        productPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                cartList.add(product);
+                JOptionPane.showMessageDialog(null, product.productName + " added to cart.");
+            }
+        });
 
         return productPanel;
     }
