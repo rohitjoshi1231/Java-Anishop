@@ -8,10 +8,7 @@ import java.awt.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 class LoginUi {
     private final CardLayout cardLayout;
@@ -80,7 +77,9 @@ class LoginUi {
 
             try {
                 // Call the service layer to authenticate the user
-                // userService.loginUser(emailId, password);
+
+                userService.loginUser(emailId, password);
+
 
                 // If login is successful, show success message
                 JOptionPane.showMessageDialog(panel, "Login successful! :) ");

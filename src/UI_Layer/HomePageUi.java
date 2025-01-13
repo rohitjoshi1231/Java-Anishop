@@ -29,10 +29,42 @@ class Product {
 // HomePageUi class to create the user interface for the home page
 class HomePageUi {
     List<Product> productList;  // List to hold dynamic products
+    List<Product> cartList;
+    JPanel mainPanel;
 
     // Constructor to accept the product list
     HomePageUi(List<Product> productList) {
         this.productList = productList;
+    }
+
+
+    // Method to create the cart panel
+    public JPanel createCartPanel() {
+        JPanel cartPanel = new JPanel();
+        cartPanel.setLayout(new BoxLayout(cartPanel, BoxLayout.Y_AXIS));
+        cartPanel.setBackground(Color.BLACK);
+
+        if (cartList.isEmpty()) {
+            JLabel emptyLabel = new JLabel("Cart is empty");
+            emptyLabel.setForeground(Color.WHITE);
+            emptyLabel.setFont(new Font("Arial", Font.BOLD, 18));
+            emptyLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            cartPanel.add(emptyLabel);
+        } else {
+            for (Product product : cartList) {
+                JPanel productPanel = createProductItemPanel(product);
+                cartPanel.add(productPanel);
+            }
+        }
+
+        return cartPanel;
+    }
+
+    private void switchPanel(JPanel newPanel) {
+        mainPanel.removeAll();
+        mainPanel.add(newPanel);
+        mainPanel.revalidate();
+        mainPanel.repaint();
     }
 
     // Method to create the home page panel
@@ -62,12 +94,19 @@ class HomePageUi {
         bottomNavPanel.setBackground(Color.BLACK);
 
         JButton homeButton = new JButton("Home");
-        JButton searchButton = new JButton("Cart");
+        JButton cartButton = new JButton("Cart");
         JButton profileButton = new JButton("Profile");
 
+        // Navigation actions
+        homeButton.addActionListener(e -> switchPanel(createHomePanel()));
+        cartButton.addActionListener(e -> switchPanel(createCartPanel()));
+        profileButton.addActionListener(e -> JOptionPane.showMessageDialog(null, "Profile section coming soon!"));
+
+
         bottomNavPanel.add(homeButton);
-        bottomNavPanel.add(searchButton);
+        bottomNavPanel.add(cartButton);
         bottomNavPanel.add(profileButton);
+
 
         // Add scrollable content and bottom navigation panel to the home page
         homePanel.add(scrollPane, BorderLayout.CENTER);
@@ -123,6 +162,5 @@ class HomePageUi {
         return productPanel;
     }
 
-    // Main method to test the home page UI
 
 }
