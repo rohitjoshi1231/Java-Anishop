@@ -75,8 +75,9 @@ class MainFrame extends JFrame {
         loginButton.setForeground(Color.WHITE);
         panel.add(loginButton);
 
+        UserService userService = new UserService();
         // Add action listener to handle login
-        loginButton.addActionListener(_ -> {
+        loginButton.addActionListener(e -> {
             String emailId = emailText.getText();
             String password = new String(passwordText.getPassword());
 
@@ -88,9 +89,12 @@ class MainFrame extends JFrame {
                 JOptionPane.showMessageDialog(panel, "Login successful! :) ");
                 cardLayout.show(mainPanel, "Home");
             } catch (Exception ex) {
+                // Debugging print to ensure exception is caught
                 System.out.println("Error caught: " + ex.getMessage());
+
                 // Show error message if login fails
-                JOptionPane.showMessageDialog(panel, "Login Failed: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(panel, "Login Failed: " + ex.getMessage(), "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -235,7 +239,9 @@ class MainFrame extends JFrame {
 
         // Add some products on Home Page
         JPanel productPanel = fetchAndDisplay();
-        homeContentPanel.add(productPanel);
+        if (productPanel != null) {
+            homeContentPanel.add(productPanel);
+        }
 
         // Set the content to scroll pane
         scrollPane.setViewportView(homeContentPanel);
@@ -412,6 +418,11 @@ class MainFrame extends JFrame {
 
 
     public JPanel fetchAndDisplay() {
+        // Parent panel to hold all product panels
+        JPanel productContainer = new JPanel();
+        productContainer.setLayout(new BoxLayout(productContainer, BoxLayout.Y_AXIS));
+        productContainer.setBackground(new Color(30, 30, 30)); // Dark background
+
         ResultSet data = HomePageService.showProducts();
         try {
             while (data != null && data.next()) {
@@ -419,7 +430,10 @@ class MainFrame extends JFrame {
                 String productName = data.getString("ProductName");
                 String productDescription = data.getString("ProductDescription");
                 double productPrice = data.getDouble("ProductPrice");
-                return createProductPanel(productName, productDescription, String.valueOf(productPrice));
+
+                // Create and add a product panel to the container
+                JPanel productPanel = createProductPanel(productName, productDescription, String.valueOf(productPrice));
+                productContainer.add(productPanel);
             }
         } catch (SQLException e) {
             System.out.println("Error: " + e);
@@ -433,9 +447,10 @@ class MainFrame extends JFrame {
                 System.out.println("Error: " + e);
             }
         }
-        return null;
-    }
 
+        return productContainer;
+    }
+   
     public static void main(String[] args) {
         new MainFrame();
     }

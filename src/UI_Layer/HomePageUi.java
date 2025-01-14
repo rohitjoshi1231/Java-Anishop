@@ -26,8 +26,6 @@ class Product {
     }
 }
 
-
-
 // HomePageUi class to create the user interface for the home page
 class HomePageUi {
     List<Product> productList;
@@ -207,6 +205,5 @@ class HomePageUi {
 
         return productPanel;
     }
-
 
 }
