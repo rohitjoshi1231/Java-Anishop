@@ -206,5 +206,4 @@ class HomePageUi {
         return productPanel;
     }
 
-
 }

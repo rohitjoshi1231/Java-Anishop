@@ -26,50 +26,14 @@ public class UserService {
         }
     }
 
-    //     public void loginUser(String emailId, String password) {
-    //         ResultSet res1 = null;
-    //         try {
-    //             // Fetch user details
-    //             res1 = userDAO.loginUser();
-    //             if (res1 == null) {
-    //                 System.out.println("No data found or an error occurred while fetching user details.");
-    //                 return;
-    //             }
-
-    //             String fetchedEmailId = "";
-    //             String fetchedPassword = "";
-
-    //             while (res1.next()) {
-    //                 fetchedEmailId = res1.getString("EmailId");
-    //                 fetchedPassword = res1.getString("Password");
-    //             }
-
-    //             if (fetchedEmailId.equals(emailId) && fetchedPassword.equals(password)) {
-    //                 System.out.println("Match found for: " + fetchedEmailId);
-    //             } else {
-    //                 System.out.println(ErrorMessage.ERROR_WHILE_LOGIN);
-    //             }
-
-    //         } catch (SQLException e) {
-    //             System.out.println("Error while processing user details: " + e.getMessage());
-    //         } finally {
-    //             if (res1 != null) {
-    //                 try {
-    //                     res1.close();
-    //                 } catch (SQLException e) {
-    //                     System.out.println("Error while closing the ResultSet: " + e.getMessage());
-    //                 }
-    //             }
-    //         }
-    //     }
-
-    public void loginUser(String emailId, String password) throws Exception {
+    public void loginUser(String emailId, String password) {
         ResultSet res1 = null;
         try {
             // Fetch user details
             res1 = userDAO.loginUser();
             if (res1 == null) {
-                throw new Exception("No data found or an error occurred while fetching user details.");
+                System.out.println("No data found or an error occurred while fetching user details.");
+                return;
             }
 
             String fetchedEmailId = "";
@@ -83,11 +47,11 @@ public class UserService {
             if (fetchedEmailId.equals(emailId) && fetchedPassword.equals(password)) {
                 System.out.println("Match found for: " + fetchedEmailId);
             } else {
-                throw new Exception("Invalid email or password.");
+                System.out.println(ErrorMessage.ERROR_WHILE_LOGIN);
             }
 
         } catch (SQLException e) {
-            throw new Exception("Error while processing user details: " + e.getMessage());
+            System.out.println("Error while processing user details: " + e.getMessage());
         } finally {
             if (res1 != null) {
                 try {
@@ -98,4 +62,42 @@ public class UserService {
             }
         }
     }
-}
+
+        
+    
+//     public void loginUser(String emailId, String password) throws Exception {
+//         ResultSet res1 = null;
+//         try {
+//             // Fetch user details
+//             res1 = userDAO.loginUser();
+//             if (res1 == null) {
+//                 throw new Exception("No data found or an error occurred while fetching user details.");
+//             }
+
+//             String fetchedEmailId = "";
+//             String fetchedPassword = "";
+
+//             while (res1.next()) {
+//                 fetchedEmailId = res1.getString("EmailId");
+//                 fetchedPassword = res1.getString("Password");
+//             }
+
+//             if (fetchedEmailId.equals(emailId) && fetchedPassword.equals(password)) {
+//                 System.out.println("Match found for: " + fetchedEmailId);
+//             } else {
+//                 throw new Exception("Invalid email or password.");
+//             }
+
+//         } catch (SQLException e) {
+//             throw new Exception("Error while processing user details: " + e.getMessage());
+//         } finally {
+//             if (res1 != null) {
+//                 try {
+//                     res1.close();
+//                 } catch (SQLException e) {
+//                     System.out.println("Error while closing the ResultSet: " + e.getMessage());
+//                 }
+//             }
+//         }
+//     }
+ }

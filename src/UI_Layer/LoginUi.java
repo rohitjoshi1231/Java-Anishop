@@ -78,19 +78,20 @@ class LoginUi {
             try {
                 // Call the service layer to authenticate the user
 
-//                userService.loginUser(emailId, password);
+                 userService.loginUser(emailId, password);
 
                 // If login is successful, show success message
                 JOptionPane.showMessageDialog(panel, "Login successful! :) ");
                 homePageOpen();
-//                openHomePage(cardLayout, mainPanel);
+                // openHomePage(cardLayout, mainPanel);
                 cardLayout.show(mainPanel, "Home");
             } catch (Exception ex) {
                 // Debugging print to ensure exception is caught
                 System.out.println("Error caught: " + ex.getMessage());
 
                 // Show error message if login fails
-                JOptionPane.showMessageDialog(panel, "Login Failed: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(panel, "Login Failed: " + ex.getMessage(), "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -128,12 +129,12 @@ class LoginUi {
 
     }
 
-//    private void openHomePage(CardLayout cardLayout, JPanel mainPanel) {
-//        // Fetch dynamic product data
-//        List<Product> products = new ArrayList<>();
-////        ResultSet res = HomePageService.showProducts();
-//
-////        try {
+    // private void openHomePage(CardLayout cardLayout, JPanel mainPanel) {
+    // // Fetch dynamic product data
+    // List<Product> products = new ArrayList<>();
+    ////        ResultSet res = HomePageService.showProducts();
+    //
+    ////        try {
 ////            while (res != null && res.next()) {
 ////                products.add(new Product(res.getInt("productId"), res.getString("productName"), res.getString("productDescription"), res.getInt("productStock"), res.getDouble("productPrice")));
 ////            }
@@ -141,14 +142,14 @@ class LoginUi {
 ////            JOptionPane.showMessageDialog(mainPanel, "Error loading products: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
 ////            e.printStackTrace();
 ////        }
-//
-//        // Pass products to HomePage UI
-//        HomePageUi ui = new HomePageUi(products);
-//        JPanel homePanel = ui.createHomePanel();
-//        mainPanel.add(homePanel, "Home");
-//
-//        // Show the home page
-//        cardLayout.show(mainPanel, "Home");
-//    }
+    //
+    // // Pass products to HomePage UI
+    // HomePageUi ui = new HomePageUi(products);
+    // JPanel homePanel = ui.createHomePanel();
+    // mainPanel.add(homePanel, "Home");
+    //
+    // // Show the home page
+    // cardLayout.show(mainPanel, "Home");
+    // }
 
 }

@@ -28,7 +28,3 @@ public class UserMenu {
         frame.setVisible(true);
     }
 }
-
-
-
-
