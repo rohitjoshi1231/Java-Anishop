@@ -122,9 +122,9 @@ class UserRegistrationUi {
         registerButton.setForeground(Color.BLACK); // Set text color to black
 
         UserService userService = new UserService();
-        // Add action listener to switch to login UI when register button is clicked
+        // Add action listener to switch to log in UI when register button is clicked
         registerButton.addActionListener(e -> {
-            // Switch to Login UI
+            // Switch to Log in UI
             String username = userText.getText();
             String email = emailText.getText();
             String phoneNumber = phoneNumberText.getText();
@@ -146,8 +146,6 @@ class UserRegistrationUi {
 
                 // If registration is successful, show success message
                 JOptionPane.showMessageDialog(panel, "Registration successful.. :) ");
-
-
 
 
                 // Switch to Log in UI after successful registration

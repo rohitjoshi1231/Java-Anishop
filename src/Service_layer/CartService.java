@@ -24,6 +24,10 @@ public class CartService {
         }
     }
 
+    public static ResultSet showSelectedProduct(int productId) {
+        return CartDAO.showSelectedProduct(productId);
+    }
+
     // Method to display items in the cart
     public void displayCartItems() {
         try (conn) {

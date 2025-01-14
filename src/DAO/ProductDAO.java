@@ -10,7 +10,7 @@ public class ProductDAO {
 
     private final Connection conn = DBConnection.connect();
 
-    public static int addProduct(String productName, String productDescription, int productStock, double productPrice) {
+    public  int addProduct(String productName, String productDescription, int productStock, double productPrice) {
 
         try (Connection conn = DBConnection.connect()) {
 
