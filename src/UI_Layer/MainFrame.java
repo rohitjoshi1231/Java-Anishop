@@ -1,5 +1,6 @@
 package UI_Layer;
 
+import DAO.CartDAO;
 import Service_layer.HomePageService;
 import Service_layer.UserService;
 
@@ -109,6 +110,95 @@ class MainFrame extends JFrame {
 
         return panel;
     }
+
+    public JPanel createProductDescriptionPanel(int productID) {
+        // Create the main panel
+        JPanel panel = new JPanel();
+        panel.setLayout(null);
+        panel.setBackground(new Color(30, 30, 30)); // Dark background
+
+        // Variables to store product details
+        String productName = "Unknown Product";
+        String productDescription = "No description available.";
+        int productStock = 0;
+        double productPrice = 0.0;
+
+        // Fetch product details from the database
+        ResultSet data = CartDAO.showSelectedProduct(productID);
+        try {
+            if (data != null && data.next()) {
+                productName = data.getString("ProductName");
+                productDescription = data.getString("ProductDescription");
+                productStock = data.getInt("ProductStock");
+                productPrice = data.getDouble("ProductPrice");
+            } else {
+                JOptionPane.showMessageDialog(panel, "Product not found.", "Error", JOptionPane.ERROR_MESSAGE);
+                return panel; // Return the empty panel if no product is found
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(panel, "Error retrieving product details: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
+                if (data != null) {
+                    data.getStatement().close();
+                    data.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error closing ResultSet: " + e.getMessage());
+            }
+        }
+
+        // Create and add labels to the panel
+        JLabel nameLabel = createLabel(productName, new Font("Arial", Font.BOLD, 26), Color.RED, 0, 20, 480, 50);
+        nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        panel.add(nameLabel);
+
+        JLabel descriptionLabel = createLabel("<html><p style='width:300px;'>" + productDescription + "</p></html>", new Font("Arial", Font.PLAIN, 14), Color.WHITE, 40, 80, 400, 60);
+        panel.add(descriptionLabel);
+
+        JLabel stockLabel = createLabel("Stock: " + (productStock > 0 ? productStock + " available" : "Out of stock"), new Font("Arial", Font.PLAIN, 14), productStock > 0 ? Color.GREEN : Color.RED, 40, 150, 200, 25);
+        panel.add(stockLabel);
+
+        JLabel priceLabel = createLabel("Price: ₹" + productPrice, new Font("Arial", Font.BOLD, 16), Color.RED, 40, 180, 200, 25);
+        panel.add(priceLabel);
+
+        // Add to Bag Button
+        JButton addToBagButton = new JButton("Add to Bag");
+        addToBagButton.setBounds(150, 230, 150, 40);
+        addToBagButton.setBackground(Color.RED);
+        addToBagButton.setForeground(Color.WHITE);
+        addToBagButton.setFont(new Font("Arial", Font.BOLD, 16));
+        addToBagButton.setBorder(null);
+        addToBagButton.setFocusPainted(false);
+        panel.add(addToBagButton);
+
+        // Add Action Listener to Button
+        int finalProductStock = productStock;
+        String finalProductName = productName;
+
+        addToBagButton.addActionListener(e -> {
+            if (finalProductStock > 0) {
+                // Logic for adding the product to the bag (cart)
+
+
+                JOptionPane.showMessageDialog(panel, finalProductName + " has been added to your bag!");
+            } else {
+                JOptionPane.showMessageDialog(panel, "Sorry, this product is out of stock.", "Out of Stock", JOptionPane.WARNING_MESSAGE);
+            }
+        });
+
+        return panel;
+    }
+
+    // Helper method to create a JLabel
+    private JLabel createLabel(String text, Font font, Color color, int x, int y, int width, int height) {
+        JLabel label = new JLabel(text);
+        label.setFont(font);
+        label.setForeground(color);
+        label.setBounds(x, y, width, height);
+        return label;
+    }
+
 
     public JPanel createRegisterPanel() {
         JPanel panel = new JPanel();
@@ -233,9 +323,12 @@ class MainFrame extends JFrame {
         homeContentPanel.setLayout(new BoxLayout(homeContentPanel, BoxLayout.Y_AXIS));
         homeContentPanel.setBackground(new Color(30, 30, 30)); // Dark background
 
-        // Add some products on Home Page
+
         JPanel productPanel = fetchAndDisplay();
-        homeContentPanel.add(productPanel);
+        if (productPanel != null) {
+            homeContentPanel.add(productPanel);
+        }
+
 
         // Set the content to scroll pane
         scrollPane.setViewportView(homeContentPanel);
@@ -410,8 +503,12 @@ class MainFrame extends JFrame {
         panel.add(textField);
     }
 
-
     public JPanel fetchAndDisplay() {
+        // Parent panel to hold all product panels
+        JPanel productContainer = new JPanel();
+        productContainer.setLayout(new BoxLayout(productContainer, BoxLayout.Y_AXIS));
+        productContainer.setBackground(new Color(30, 30, 30)); // Dark background
+
         ResultSet data = HomePageService.showProducts();
         try {
             while (data != null && data.next()) {
@@ -419,7 +516,25 @@ class MainFrame extends JFrame {
                 String productName = data.getString("ProductName");
                 String productDescription = data.getString("ProductDescription");
                 double productPrice = data.getDouble("ProductPrice");
-                return createProductPanel(productName, productDescription, String.valueOf(productPrice));
+
+                // Create a product panel
+                JPanel productPanel = createProductPanel(productName, productDescription, String.valueOf(productPrice));
+
+                // Add a MouseListener to navigate to the description page
+                productPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+                    public void mouseClicked(java.awt.event.MouseEvent evt) {
+                        JPanel descriptionPanel = createProductDescriptionPanel(productId);
+
+                        // Replace the home panel content with the description panel
+                        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(productContainer);
+                        frame.getContentPane().removeAll();
+                        frame.getContentPane().add(descriptionPanel);
+                        frame.revalidate();
+                        frame.repaint();
+                    }
+                });
+
+                productContainer.add(productPanel);
             }
         } catch (SQLException e) {
             System.out.println("Error: " + e);
@@ -433,8 +548,10 @@ class MainFrame extends JFrame {
                 System.out.println("Error: " + e);
             }
         }
-        return null;
+
+        return productContainer;
     }
+
 
     public static void main(String[] args) {
         new MainFrame();
