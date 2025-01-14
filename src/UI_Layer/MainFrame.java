@@ -180,7 +180,6 @@ class MainFrame extends JFrame {
             if (finalProductStock > 0) {
                 // Logic for adding the product to the bag (cart)
 
-
                 JOptionPane.showMessageDialog(panel, finalProductName + " has been added to your bag!");
             } else {
                 JOptionPane.showMessageDialog(panel, "Sorry, this product is out of stock.", "Out of Stock", JOptionPane.WARNING_MESSAGE);
