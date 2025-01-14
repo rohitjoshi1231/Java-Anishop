@@ -426,7 +426,7 @@ class MainFrame extends JFrame {
         // priceLabel.setFont(new Font("Arial", Font.BOLD, 15)); // Set the font to bold
         // priceLabel.setForeground(Color.RED);
         JLabel nameLabel = new JLabel("<html><b>Product Name:</b>&nbsp;&nbsp;" + name + "</html>");
-        nameLabel.setFont(new Font("Arial", Font.PLAIN, 15)); // Keep the font normal for inner content
+        nameLabel.setFont(new Font("Arial", Font.PLAIN, 18)); // Keep the font normal for inner content
         nameLabel.setForeground(Color.WHITE);
 
         JLabel descriptionLabel = new JLabel("<html><b>Description:</b>&nbsp;&nbsp;" + description + "</html>");
@@ -586,55 +586,55 @@ class MainFrame extends JFrame {
         panel.add(textField);
     }
 
-    public JPanel fetchCart() {
-        JPanel productContainer = new JPanel();
-        productContainer.setLayout(new BoxLayout(productContainer, BoxLayout.Y_AXIS));
-        productContainer.setBackground(new Color(30, 30, 30)); // Dark background
+    // public JPanel fetchCart() {
+    //     JPanel productContainer = new JPanel();
+    //     productContainer.setLayout(new BoxLayout(productContainer, BoxLayout.Y_AXIS));
+    //     productContainer.setBackground(new Color(30, 30, 30)); // Dark background
 
-        ResultSet data = HomePageService.showProducts();
-        try {
-            while (data != null && data.next()) {
-                int cartId = data.getInt("CartId");
-                int productId = data.getInt("ProductId");
-                int productQuantity = data.getInt("Quanitiy");
-                double productPrice = data.getDouble("PriceAtAdd");
+    //     ResultSet data = HomePageService.showProducts();
+    //     try {
+    //         while (data != null && data.next()) {
+    //             int cartId = data.getInt("CartId");
+    //             int productId = data.getInt("ProductId");
+    //             int productQuantity = data.getInt("Quanitiy");
+    //             double productPrice = data.getDouble("PriceAtAdd");
 
-                // Create a product panel
-                JPanel productPanel = createProductPanel(cartId, productDescription, String.valueOf(productPrice));
+    //             // Create a product panel
+    //             JPanel productPanel = createProductPanel(cartId, productDescription, String.valueOf(productPrice));
 
-                // Add a MouseListener to navigate to the description page
-                productPanel.addMouseListener(new java.awt.event.MouseAdapter() {
-                    public void mouseClicked(java.awt.event.MouseEvent evt) {
-                        JPanel descriptionPanel = createProductDescriptionPanel(productId, mainPanel, cardLayout);
+    //             // Add a MouseListener to navigate to the description page
+    //             productPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+    //                 public void mouseClicked(java.awt.event.MouseEvent evt) {
+    //                     JPanel descriptionPanel = createProductDescriptionPanel(productId, mainPanel, cardLayout);
                         
 
-                        // Replace the home panel content with the description panel
-                        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(productContainer);
-                        frame.getContentPane().removeAll();
-                        frame.getContentPane().add(descriptionPanel);
-                        frame.revalidate();
-                        frame.repaint();
-                    }
-                });
+    //                     // Replace the home panel content with the description panel
+    //                     JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(productContainer);
+    //                     frame.getContentPane().removeAll();
+    //                     frame.getContentPane().add(descriptionPanel);
+    //                     frame.revalidate();
+    //                     frame.repaint();
+    //                 }
+    //             });
 
-                productContainer.add(productPanel);
-            }
-        } catch (SQLException e) {
-            System.out.println("Error: " + e);
-        } finally {
-            try {
-                if (data != null) {
-                    data.getStatement().close();
-                    data.close();
-                }
-            } catch (SQLException e) {
-                System.out.println("Error: " + e);
-            }
-        }
+    //             productContainer.add(productPanel);
+    //         }
+    //     } catch (SQLException e) {
+    //         System.out.println("Error: " + e);
+    //     } finally {
+    //         try {
+    //             if (data != null) {
+    //                 data.getStatement().close();
+    //                 data.close();
+    //             }
+    //         } catch (SQLException e) {
+    //             System.out.println("Error: " + e);
+    //         }
+    //     }
 
-        return productContainer;
+    //     return productContainer;
 
-    }
+    // }
 
     public JPanel fetchAndDisplay() {
         // Parent panel to hold all product panels
