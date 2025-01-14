@@ -399,18 +399,37 @@ class MainFrame extends JFrame {
     }
 
     private JPanel createProductPanel(String... details) {
-        JPanel productPanel = new JPanel();
-        productPanel.setLayout(new BoxLayout(productPanel, BoxLayout.Y_AXIS));
-        productPanel.setBackground(new Color(40, 40, 40));
-        productPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(3, 1));
+        panel.setBackground(new Color(40, 40, 40)); // Slightly lighter dark
+
+        // Add a border with elevation effect (shadow-like)
+        panel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.RED, 2), // Red border
+                // for
+                // highlight
+                BorderFactory.createEmptyBorder(20, 10, 20, 10) // Padding inside the border
+        ));
+
+        // Set a slight shadow effect using background color and border
+        panel.setBackground(new Color(40, 40, 40));
+        panel.setOpaque(true);
 
         for (String detail : details) {
-            JLabel label = new JLabel(detail);
+            JLabel label = new JLabel("<html>&nbsp;&nbsp;" + detail + "</html>");
+            label.setFont(new Font("Arial", Font.PLAIN, 15)); // Keep the font normal for inner content
             label.setForeground(Color.WHITE);
-            productPanel.add(label);
+            panel.add(label);
         }
 
-        return productPanel;
+
+//        panel.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                JOptionPane.showMessageDialog(panel, "Product clicked: " + name);
+//            }
+//        });
+
+        return panel;
     }
 
 
