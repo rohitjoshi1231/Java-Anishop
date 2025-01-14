@@ -176,7 +176,7 @@ class MainFrame extends JFrame {
         int finalProductStock = productStock;
         String finalProductName = productName;
 
-        addToBagButton.addActionListener(e -> {
+        addToBagButton.addActionListener(_ -> {
             if (finalProductStock > 0) {
                 // Logic for adding the product to the bag (cart)
 
