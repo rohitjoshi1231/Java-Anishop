@@ -17,10 +17,8 @@ public class CartDAO {
 
     // Method to show a selected product by productId
     public static ResultSet showSelectedProduct(int productId) {
-
         ResultSet resultSet = null;
-        try {
-            Connection conn = DBConnection.connect();
+        try (Connection conn = DBConnection.connect()) {
             if (conn == null) {
                 System.out.println("Connection not established.");
                 return null;
@@ -31,7 +29,7 @@ public class CartDAO {
         } catch (SQLException e) {
             System.out.println("Error executing query: " + e.getMessage());
         }
-        return resultSet; // Ensure you close this ResultSet later in your calling code
+        return resultSet;
     }
 
     // Fetch product details based on the ProductId
@@ -39,19 +37,23 @@ public class CartDAO {
         String query = "SELECT ProductId, ProductStock, ProductPrice FROM products WHERE ProductId = ?";
         List<Map<String, Object>> productData = new ArrayList<>();
 
-        try (Connection conn = DBConnection.connect();
-                PreparedStatement stmt = conn.prepareStatement(query)) {
-
+        try (Connection conn = DBConnection.connect()) {
             assert conn != null;
-            stmt.setInt(1, productId);
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
 
-            try (ResultSet res = stmt.executeQuery()) {
-                while (res.next()) {
-                    Map<String, Object> row = new HashMap<>();
-                    row.put("ProductId", res.getInt("ProductId"));
-                    row.put("Quantity", res.getInt("ProductStock")); // Assuming this maps to Quantity in cart
-                    row.put("PriceAtAdd", res.getInt("ProductPrice"));
-                    productData.add(row);
+                stmt.setInt(1, productId);
+
+                try (ResultSet res = stmt.executeQuery()) {
+                    while (res.next()) {
+                        Map<String, Object> row = new HashMap<>();
+                        row.put("ProductId", res.getInt("ProductId"));
+                        row.put("Quantity", res.getInt("ProductStock"));
+                        row.put("ProductPrice", res.getDouble("ProductPrice"));
+                        row.put("ProductName", res.getString("ProductName"));
+                        row.put("ProductDescription", res.getString("ProductDescription"));
+
+                        productData.add(row);
+                    }
                 }
             }
         } catch (SQLException e) {

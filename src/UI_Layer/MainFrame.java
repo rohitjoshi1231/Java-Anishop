@@ -6,6 +6,7 @@ import Service_layer.CartService.CartProduct;
 import Service_layer.HomePageService;
 import Service_layer.UserService;
 import Utilities.Constants.SqlQueries;
+
 import java.util.List;
 import javax.swing.*;
 import java.awt.*;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 class MainFrame extends JFrame {
     public CardLayout cardLayout;
     public JPanel mainPanel;
-    
+
     private final UserService userService = new UserService();
 
     public MainFrame() {
@@ -43,7 +44,7 @@ class MainFrame extends JFrame {
         // Create and add the Home Page panel
         JPanel homePanel = createHomePanel();
         mainPanel.add(homePanel, "Home");
-        
+
 
         // Show the frame
         setContentPane(mainPanel);
@@ -117,7 +118,7 @@ class MainFrame extends JFrame {
 
         return panel;
     }
-    
+
     // private CardLayout cardLayout;
     // private JPanel mainPanel;
 
@@ -126,7 +127,7 @@ class MainFrame extends JFrame {
         JPanel panel = new JPanel();
         this.mainPanel = mainPanel;
         this.cardLayout = cardLayout;
-       
+
         panel.setLayout(null);
         panel.setBackground(new Color(30, 30, 30)); // Dark background
 
@@ -351,14 +352,14 @@ class MainFrame extends JFrame {
                 // In case of any error during the registration process, show error message
                 // JOptionPane.showMessageDialog(panel, "Error: " + ex.getMessage(), "Registration Failed",
                 //         JOptionPane.ERROR_MESSAGE);
-                JOptionPane.showMessageDialog(panel , "Error" + ex.getMessage(),  "Registration Failed",
+                JOptionPane.showMessageDialog(panel, "Error" + ex.getMessage(), "Registration Failed",
                         JOptionPane.ERROR_MESSAGE);
             }
         });
 
         // Create an "Already registered? Login" clickable text
         JLabel loginLabel = new JLabel("<html>Already have an account? <a href=''>Login here.</a></html>");
-    
+
         loginLabel.setBounds(150, 360, 250, 25); // Position and size
         loginLabel.setForeground(Color.WHITE); // Set the color for the clickable text
         loginLabel.addMouseListener(new MouseAdapter() {
@@ -397,63 +398,80 @@ class MainFrame extends JFrame {
         return homePanel;
     }
 
-    public JPanel createProductPanel(String name, String description, String price) {
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(3, 1));
-        panel.setBackground(new Color(40, 40, 40)); // Slightly lighter dark
+    private JPanel createProductPanel(String... details) {
+        JPanel productPanel = new JPanel();
+        productPanel.setLayout(new BoxLayout(productPanel, BoxLayout.Y_AXIS));
+        productPanel.setBackground(new Color(40, 40, 40));
+        productPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
-        // Add a border with elevation effect (shadow-like)
-        panel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.RED, 2), // Red border
-                // for
-                // highlight
-                BorderFactory.createEmptyBorder(20, 10, 20, 10) // Padding inside the border
-        ));
+        for (String detail : details) {
+            JLabel label = new JLabel(detail);
+            label.setForeground(Color.WHITE);
+            productPanel.add(label);
+        }
 
-        // Set a slight shadow effect using background color and border
-        panel.setBackground(new Color(40, 40, 40));
-        panel.setOpaque(true);
-
-        // Add product labels
-        // JLabel nameLabel = new JLabel("Product Name: " + name);
-        // nameLabel.setFont(new Font("Arial", Font.BOLD, 15)); // Set the font to bold
-        // nameLabel.setForeground(Color.WHITE);
-
-        // JLabel descriptionLabel = new JLabel("Description: " + description);
-        // descriptionLabel.setFont(new Font("Arial", Font.BOLD, 15)); // Set the font to bold
-        // descriptionLabel.setForeground(Color.WHITE);
-
-        // JLabel priceLabel = new JLabel("Price: " + price);
-        // priceLabel.setFont(new Font("Arial", Font.BOLD, 15)); // Set the font to bold
-        // priceLabel.setForeground(Color.RED);
-        JLabel nameLabel = new JLabel("<html><b>Product Name:</b>&nbsp;&nbsp;" + name + "</html>");
-        nameLabel.setFont(new Font("Arial", Font.PLAIN, 15)); // Keep the font normal for inner content
-        nameLabel.setForeground(Color.WHITE);
-
-        JLabel descriptionLabel = new JLabel("<html><b>Description:</b>&nbsp;&nbsp;" + description + "</html>");
-        descriptionLabel.setFont(new Font("Arial", Font.PLAIN, 15)); // Keep the font normal for inner content
-        descriptionLabel.setForeground(Color.WHITE);
-
-        JLabel priceLabel = new JLabel("<html><b>Price:</b>&nbsp;&nbsp;" + price + "</html>");
-        priceLabel.setFont(new Font("Arial", Font.PLAIN, 15)); // Keep the font normal for inner content
-        priceLabel.setForeground(Color.RED);
-
-        panel.add(nameLabel);
-        panel.add(descriptionLabel);
-        panel.add(priceLabel);
-
-        // Add MouseListener for click action on product
-        panel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                JOptionPane.showMessageDialog(panel, "Product clicked: " + name);
-            }
-        });
-
-        return panel;
+        return productPanel;
     }
 
-    /*** Cart Page */
 
+//    public JPanel createProductPanel(String name, String description, String price) {
+//        JPanel panel = new JPanel();
+//        panel.setLayout(new GridLayout(3, 1));
+//        panel.setBackground(new Color(40, 40, 40)); // Slightly lighter dark
+//
+//        // Add a border with elevation effect (shadow-like)
+//        panel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.RED, 2), // Red border
+//                // for
+//                // highlight
+//                BorderFactory.createEmptyBorder(20, 10, 20, 10) // Padding inside the border
+//        ));
+//
+//        // Set a slight shadow effect using background color and border
+//        panel.setBackground(new Color(40, 40, 40));
+//        panel.setOpaque(true);
+//
+//        // Add product labels
+//        // JLabel nameLabel = new JLabel("Product Name: " + name);
+//        // nameLabel.setFont(new Font("Arial", Font.BOLD, 15)); // Set the font to bold
+//        // nameLabel.setForeground(Color.WHITE);
+//
+//        // JLabel descriptionLabel = new JLabel("Description: " + description);
+//        // descriptionLabel.setFont(new Font("Arial", Font.BOLD, 15)); // Set the font to bold
+//        // descriptionLabel.setForeground(Color.WHITE);
+//
+//        // JLabel priceLabel = new JLabel("Price: " + price);
+//        // priceLabel.setFont(new Font("Arial", Font.BOLD, 15)); // Set the font to bold
+//        // priceLabel.setForeground(Color.RED);
+//
+//
+//        JLabel nameLabel = new JLabel("<html><b>Product Name:</b>&nbsp;&nbsp;" + name + "</html>");
+//        nameLabel.setFont(new Font("Arial", Font.PLAIN, 15)); // Keep the font normal for inner content
+//        nameLabel.setForeground(Color.WHITE);
+//
+//        JLabel descriptionLabel = new JLabel("<html><b>Description:</b>&nbsp;&nbsp;" + description + "</html>");
+//        descriptionLabel.setFont(new Font("Arial", Font.PLAIN, 15)); // Keep the font normal for inner content
+//        descriptionLabel.setForeground(Color.WHITE);
+//
+//        JLabel priceLabel = new JLabel("<html><b>Price:</b>&nbsp;&nbsp;" + price + "</html>");
+//        priceLabel.setFont(new Font("Arial", Font.PLAIN, 15)); // Keep the font normal for inner content
+//        priceLabel.setForeground(Color.RED);
+//
+//        panel.add(nameLabel);
+//        panel.add(descriptionLabel);
+//        panel.add(priceLabel);
+//
+//        // Add MouseListener for click action on product
+//        panel.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                JOptionPane.showMessageDialog(panel, "Product clicked: " + name);
+//            }
+//        });
+//
+//        return panel;
+//    }
+
+    /*** Cart Page */
     private void showCartPage() {
         JPanel cartPanel = new JPanel(new BorderLayout());
         cartPanel.setBackground(new Color(30, 30, 30)); // Dark background
@@ -464,24 +482,23 @@ class MainFrame extends JFrame {
         cartContentPanel.setBackground(new Color(30, 30, 30)); // Dark background
 
         CartService service = new CartService();
-        // Fetch cart items from the database
         List<CartProduct> cartItems = service.displayCartItems();
 
-        // Add each product to the cartContentPanel dynamically
         for (CartProduct cartProduct : cartItems) {
             JPanel cartProductPanel = createProductPanel(
-                    "Product ID: " + cartProduct.getProductId(),
+                    "Name: " + cartProduct.getProductName(),
+                    "Description: " + cartProduct.getProductDescription(),
                     "Quantity: " + cartProduct.getQuantity(),
-                    "$" + cartProduct.getPriceAtAdd());
+                    "Price: $" + cartProduct.getPriceAtAdd()
+            );
             cartContentPanel.add(cartProductPanel);
         }
 
         scrollPane.setViewportView(cartContentPanel);
         cartPanel.add(scrollPane, BorderLayout.CENTER);
 
-        // Add "Buy All" button at the bottom
         JPanel buyAllPanel = new JPanel();
-        buyAllPanel.setBackground(new Color(40, 40, 40)); // Dark background
+        buyAllPanel.setBackground(new Color(40, 40, 40));
         JButton buyAllButton = new JButton("Buy All");
         buyAllButton.setBackground(Color.RED);
         buyAllButton.setForeground(Color.WHITE);
@@ -491,7 +508,6 @@ class MainFrame extends JFrame {
         buyAllPanel.add(buyAllButton);
         cartPanel.add(buyAllPanel, BorderLayout.SOUTH);
 
-        // Add Bottom Navigation
         JPanel bottomNav = createBottomNav();
         cartPanel.add(bottomNav, BorderLayout.NORTH);
 
@@ -576,9 +592,7 @@ class MainFrame extends JFrame {
     }
 
     public void field(JLabel jLabel, JPanel panel, JTextField textField, int x, int y, int width1, int height1, int x1,
-            int y1, int width2, int height2) {
-        // Add an age label and text field
-
+                      int y1, int width2, int height2) {
         jLabel.setBounds(x, y, width1, height1);
         jLabel.setForeground(Color.WHITE);
         panel.add(jLabel);
@@ -586,55 +600,57 @@ class MainFrame extends JFrame {
         panel.add(textField);
     }
 
-    public JPanel fetchCart() {
-        JPanel productContainer = new JPanel();
-        productContainer.setLayout(new BoxLayout(productContainer, BoxLayout.Y_AXIS));
-        productContainer.setBackground(new Color(30, 30, 30)); // Dark background
 
-        ResultSet data = HomePageService.showProducts();
-        try {
-            while (data != null && data.next()) {
-                int cartId = data.getInt("CartId");
-                int productId = data.getInt("ProductId");
-                int productQuantity = data.getInt("Quanitiy");
-                double productPrice = data.getDouble("PriceAtAdd");
-
-                // Create a product panel
-                JPanel productPanel = createProductPanel(cartId, productDescription, String.valueOf(productPrice));
-
-                // Add a MouseListener to navigate to the description page
-                productPanel.addMouseListener(new java.awt.event.MouseAdapter() {
-                    public void mouseClicked(java.awt.event.MouseEvent evt) {
-                        JPanel descriptionPanel = createProductDescriptionPanel(productId, mainPanel, cardLayout);
-                        
-
-                        // Replace the home panel content with the description panel
-                        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(productContainer);
-                        frame.getContentPane().removeAll();
-                        frame.getContentPane().add(descriptionPanel);
-                        frame.revalidate();
-                        frame.repaint();
-                    }
-                });
-
-                productContainer.add(productPanel);
-            }
-        } catch (SQLException e) {
-            System.out.println("Error: " + e);
-        } finally {
-            try {
-                if (data != null) {
-                    data.getStatement().close();
-                    data.close();
-                }
-            } catch (SQLException e) {
-                System.out.println("Error: " + e);
-            }
-        }
-
-        return productContainer;
-
-    }
+//    public JPanel fetchCart() {
+//        JPanel productContainer = new JPanel();
+//        productContainer.setLayout(new BoxLayout(productContainer, BoxLayout.Y_AXIS));
+//        productContainer.setBackground(new Color(30, 30, 30)); // Dark background
+//
+//        ResultSet data = HomePageService.showProducts();
+//        try {
+//            while (data != null && data.next()) {
+//                int cartId = data.getInt("CartId");
+//                int productId = data.getInt("ProductId");
+//                int productQuantity = data.getInt("Quanitiy");
+//                double productPrice = data.getDouble("PriceAtAdd");
+//
+//                // Create a product panel
+//                JPanel productPanel = createProductPanel(cartId, productDescription, String.valueOf(productPrice));
+//
+//                // Add a MouseListener to navigate to the description page
+//                productPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+//                    public void mouseClicked(java.awt.event.MouseEvent evt) {
+//                        JPanel descriptionPanel = createProductDescriptionPanel(productId, mainPanel, cardLayout);
+//
+//
+//                        // Replace the home panel content with the description panel
+//                        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(productContainer);
+//                        frame.getContentPane().removeAll();
+//                        frame.getContentPane().add(descriptionPanel);
+//                        frame.revalidate();
+//                        frame.repaint();
+//                    }
+//                });
+//
+//                productContainer.add(productPanel);
+//            }
+//        } catch (SQLException e) {
+//            System.out.println("Error: " + e);
+//        } finally {
+//            try {
+//                if (data != null) {
+//                    data.getStatement().close();
+//                    data.close();
+//                }
+//            } catch (SQLException e) {
+//                System.out.println("Error: " + e);
+//            }
+//        }
+//
+//        return productContainer;
+//
+//    }
+//
 
     public JPanel fetchAndDisplay() {
         // Parent panel to hold all product panels
@@ -688,6 +704,6 @@ class MainFrame extends JFrame {
 
     public static void main(String[] args) {
         new MainFrame();
-        
+
     }
 }
