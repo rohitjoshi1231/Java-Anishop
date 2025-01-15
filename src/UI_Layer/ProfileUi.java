@@ -6,7 +6,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
@@ -113,11 +112,11 @@ public class ProfileUi {
     public static String readEmail() {
         String email = null;
         try (BufferedReader reader = new BufferedReader(new FileReader("source.txt"))) {
-           email = reader.readLine();  // Read the email from source.txt
+            email = reader.readLine();  // Read the email from source.txt
             System.out.println("Email read from source.txt: " + email);
         } catch (IOException e) {
-            System.out.println("e"+e);
+            System.out.println("e" + e);
         }
-        return  email;
+        return email;
     }
 }

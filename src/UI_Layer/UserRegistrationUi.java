@@ -7,8 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+
 import static UI_Layer.MainFrame.field;
 
 public class UserRegistrationUi {
@@ -101,7 +100,6 @@ public class UserRegistrationUi {
             }
 
 
-
             try {
                 // Call the service layer to register the user
                 userService.registerUser(email, password, name, gender, Integer.parseInt(age), phoneNumber);
@@ -131,7 +129,6 @@ public class UserRegistrationUi {
 
         return panel;
     }
-
 
 
     public static void radioButtonTemplate(JRadioButton radioButton, JPanel panel, int x, int y, int width, int height) {

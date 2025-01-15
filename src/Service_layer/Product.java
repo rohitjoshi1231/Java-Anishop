@@ -1,6 +1,6 @@
 package Service_layer;
 
-public  class Product {
+public class Product {
     private int productId;
     private String productName;
     private String productDescription;

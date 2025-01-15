@@ -1,37 +1,18 @@
 package Service_layer;
 
 import DAO.UserDAO;
-import Utilities.Constants.ErrorMessage;
 import Utilities.ValidationUtil;
 
-import javax.swing.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class UserService {
     private final ValidationUtil validation = new ValidationUtil();
     private final UserDAO userDAO = new UserDAO();
-
-    public void registerUser(
-            String emailId,
-            String password,
-            String name,
-            char gender,
-            int age,
-            String phoneNumber) {
-
-        if (validation.validateRegister(emailId, password, name, gender, age, phoneNumber)) {
-            userDAO.registerUser(emailId, hashString(password), name, gender, age, phoneNumber);
-        } else {
-            System.out.println("Please Enter correct details !");
-        }
-    }
-
 
     public static String hashString(String input) {
         try {
@@ -54,6 +35,22 @@ public class UserService {
             return null;
         }
     }
+
+    public void registerUser(
+            String emailId,
+            String password,
+            String name,
+            char gender,
+            int age,
+            String phoneNumber) {
+
+        if (validation.validateRegister(emailId, password, name, gender, age, phoneNumber)) {
+            userDAO.registerUser(emailId, hashString(password), name, gender, age, phoneNumber);
+        } else {
+            System.out.println("Please Enter correct details !");
+        }
+    }
+
     public boolean loginUser(String emailId, String password) {
         boolean found = false;
         ResultSet res1 = null;
@@ -89,9 +86,8 @@ public class UserService {
             }
         }
 
-        return  found;
+        return found;
     }
-
 
 
     public List<UserData> fetchUserData(String emailId) {
@@ -145,12 +141,29 @@ public class UserService {
         }
 
         // Getter methods
-        public String id() { return id; }
-        public String emailId() { return emailId; }
-        public String name() { return name; }
-        public String gender() { return gender; }
-        public int age() { return age; }
-        public String phoneNumber() { return phoneNumber; }
+        public String id() {
+            return id;
+        }
+
+        public String emailId() {
+            return emailId;
+        }
+
+        public String name() {
+            return name;
+        }
+
+        public String gender() {
+            return gender;
+        }
+
+        public int age() {
+            return age;
+        }
+
+        public String phoneNumber() {
+            return phoneNumber;
+        }
     }
 
 
@@ -189,4 +202,4 @@ public class UserService {
 //             }
 //         }
 //     }
- }
+}

@@ -4,7 +4,10 @@ import Utilities.Constants.ErrorMessage;
 import Utilities.Constants.SqlQueries;
 import Utilities.DBConnection;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class UserDAO {
 

@@ -11,7 +11,6 @@ public class ProductService {
     ProductDAO productDAO = new ProductDAO(); // Updated to fetch products from DAO
 
 
-
     public void addProduct(String productName, String productDescription, int productStock, double productPrice) {
         boolean isProductValid = validation.validateName(productName) &&
                 validation.validateName(productDescription) &&

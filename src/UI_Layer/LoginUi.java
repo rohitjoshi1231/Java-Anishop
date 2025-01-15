@@ -12,7 +12,7 @@ import java.io.IOException;
 import static Service_layer.UserService.hashString;
 import static UI_Layer.MainFrame.field;
 
-public class LoginUi{
+public class LoginUi {
 
     public static JPanel createLoginPanel(CardLayout cardLayout, JPanel mainPanel) {
         JPanel panel = new JPanel();
@@ -61,11 +61,11 @@ public class LoginUi{
                 // Call the service layer to authenticate the user
 
                 boolean is_loggedIn = userService.loginUser(emailId, hashString(password));
-                if (is_loggedIn){
+                if (is_loggedIn) {
                     sendEmail(emailId);
                     JOptionPane.showMessageDialog(panel, "Login successful! :) ");
                     cardLayout.show(mainPanel, "Home");
-                }else {
+                } else {
                     JOptionPane.showMessageDialog(panel, "Login Failed! :( ");
                 }
 
@@ -90,7 +90,7 @@ public class LoginUi{
         return panel;
     }
 
-    public static void sendEmail(String email){
+    public static void sendEmail(String email) {
 
         try (FileWriter writer = new FileWriter("source.txt")) {
             writer.write(email);  // Write email to source.txt

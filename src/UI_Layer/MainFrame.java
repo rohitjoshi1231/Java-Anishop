@@ -11,8 +11,6 @@ import static UI_Layer.ProfileUi.showProfilePage;
 import static UI_Layer.UserRegistrationUi.createRegisterPanel;
 
 class MainFrame extends JFrame {
-    private static JPanel mainPanel;
-    private static CardLayout cardLayout;
 
 
     public MainFrame() {
@@ -20,8 +18,8 @@ class MainFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 690);
 
-        mainPanel = new JPanel(new CardLayout());
-        cardLayout = (CardLayout) mainPanel.getLayout();
+        JPanel mainPanel = new JPanel(new CardLayout());
+        CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
 
 
         // Create and add the Login panel
@@ -40,131 +38,6 @@ class MainFrame extends JFrame {
         setContentPane(mainPanel);
         setVisible(true);
     }
-
-//    public JPanel createProductDescriptionPanel(int productID, JPanel mainPanel, CardLayout cardLayout) {
-//        // Create the main panel
-//        JPanel panel = new JPanel();
-//        this.mainPanel = mainPanel;
-//        this.cardLayout = cardLayout;
-//
-//        // Variables to store product details
-//        String productName = "Unknown Product";
-//        String productDescription = "No description available.";
-//        int productStock = 0;
-//        double productPrice = 0.0;
-//
-//        panel.setLayout(null);
-//        panel.setBackground(new Color(30, 30, 30)); // Dark background
-//
-//        // Fetch product details from the database
-//        Product product = CartDAO.showSelectedProduct(productID);
-//        //Product product = CartDAO.showSelectedProduct(productID);
-//
-//        if (product != null) {
-//            productName = product.getProductName();
-//            productDescription = product.getProductDescription();
-//            productStock = product.getProductStock();
-//            productPrice = product.getProductPrice();
-//        } else {
-//            JOptionPane.showMessageDialog(panel, "Product not found.", "Error", JOptionPane.ERROR_MESSAGE);
-//            return panel; // Return the empty panel if no product is found
-//        }
-//
-//        // Create and add labels to the panel
-//        JLabel nameLabel = createLabel(productName, new Font("Arial", Font.BOLD, 26), Color.RED, 0, 20, 480, 50);
-//        nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-//        panel.add(nameLabel);
-//
-//        JLabel descriptionLabel = createLabel("<html><p style='width:300px;'>" + productDescription + "</p></html>",
-//                new Font("Arial", Font.PLAIN, 14), Color.WHITE, 40, 80, 400, 60);
-//        panel.add(descriptionLabel);
-//
-//        JLabel stockLabel = createLabel("Stock: " + (productStock > 0 ? productStock + " available" : "Out of stock"),
-//                new Font("Arial", Font.PLAIN, 14), productStock > 0 ? Color.GREEN : Color.RED, 40, 150, 200, 25);
-//        panel.add(stockLabel);
-//
-//        JLabel priceLabel = createLabel("Price: ₹" + productPrice, new Font("Arial", Font.BOLD, 16), Color.RED, 40, 180,
-//                200, 25);
-//        panel.add(priceLabel);
-//
-//        // Add to Bag Button
-//        JButton addToBagButton = new JButton("Add to Bag");
-//        addToBagButton.setBounds(150, 230, 150, 40);
-//        addToBagButton.setBackground(Color.RED);
-//        addToBagButton.setForeground(Color.WHITE);
-//        addToBagButton.setFont(new Font("Arial", Font.BOLD, 16));
-//        addToBagButton.setBorder(null);
-//        addToBagButton.setFocusPainted(false);
-//        panel.add(addToBagButton);
-//
-//        // Go Back to Home Button
-//        JButton goBackHome = new JButton("Back to Home");
-//        goBackHome.setBounds(150, 300, 150, 40);
-//        goBackHome.setBackground(Color.RED);
-//        goBackHome.setForeground(Color.WHITE);
-//        goBackHome.setFont(new Font("Arial", Font.BOLD, 16));
-//        goBackHome.setBorder(null);
-//        goBackHome.setFocusPainted(false);
-//        panel.add(goBackHome);
-//
-//        // Add Action Listener to "Add to Bag" Button
-//        int stock = productStock;
-//        String name = productName;
-//        CartService service = new CartService();
-//        addToBagButton.addActionListener(_ -> {
-//
-//            if (stock > 0) {
-//                // Logic for adding the product to the bag (cart)
-//                service.addProductToBag(productID);
-//                JOptionPane.showMessageDialog(panel, name + " has been added to your bag!");
-//                try {
-//                    System.out.println("Navigating back to Home...");
-//                    if (mainPanel != null && cardLayout != null) {
-//                        // Ensure the correct card is being shown
-//                        cardLayout.show(mainPanel, "Home"); // This should match the panel name given when adding
-//                        // homePanel
-//                        mainPanel.revalidate(); // Revalidate layout
-//                        mainPanel.repaint(); // Repaint the panel to reflect the new card
-//                    } else {
-//                        System.out.println("mainPanel or cardLayout is null!");
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    JOptionPane.showMessageDialog(panel, "Error navigating back to Home: " + e.getMessage(), "Error",
-//                            JOptionPane.ERROR_MESSAGE);
-//                }
-//
-//            } else {
-//                JOptionPane.showMessageDialog(panel, "Sorry, this product is out of stock.", "Out of Stock",
-//                        JOptionPane.WARNING_MESSAGE);
-//            }
-//        });
-//
-//        // Add Action Listener to "Back to Home" Button
-//        goBackHome.addActionListener(_ -> {
-//            try {
-//                if (mainPanel != null && cardLayout != null) {
-//                    // Ensure the correct card is being shown
-//                    cardLayout.show(mainPanel, "Cart"); // This should match the panel name given when adding homePanel
-//                    mainPanel.revalidate(); // Revalidate layout
-//                    mainPanel.repaint(); // Repaint the panel to reflect the new card
-//                } else {
-//                    System.out.println("mainPanel or cardLayout is null!");
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                JOptionPane.showMessageDialog(panel, "Error navigating back to Home: " + e.getMessage(), "Error",
-//                        JOptionPane.ERROR_MESSAGE);
-//            }
-//        });
-//
-//        // Create bottom navigation and add it to the bottom of the panel
-//        JPanel bottomNav = createBottomNav(cardLayout, mainPanel);
-//        panel.add(bottomNav, BorderLayout.SOUTH); // Add the bottomNav to the SOUTH region
-//
-//        return panel;
-//    }
-
 
 
     public static JPanel createProductPanel(int productId, String productName, String productDescription, double productPrice) {
@@ -253,7 +126,7 @@ class MainFrame extends JFrame {
         // Action listener for "Add to Bag" button
         addToBagButton.addActionListener(e -> {
             CartService.addCart(productId, quantity[0]);
-            JOptionPane.showMessageDialog(panel,  productName + " added to bag"+ " of Quantity: " + quantity[0]);
+            JOptionPane.showMessageDialog(panel, productName + " added to bag" + " of Quantity: " + quantity[0]);
 
         });
 

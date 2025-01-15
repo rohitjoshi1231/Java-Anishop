@@ -15,6 +15,15 @@ import java.util.List;
 public class CartService {
     private static final ValidationUtil validation = new ValidationUtil();
 
+    // Method to add a product to the cart
+    public static void addCart(int productId, int quantity) {
+        if (validation.validateQuantity(quantity)) {
+            CartDAO.addCart(productId, quantity);
+        } else {
+            System.out.println(ErrorMessage.ERROR_WHILE_ADDING_PRODUCT_IN_CART);
+        }
+    }
+
     public List<CartProduct> displayCartItems() {
         List<CartProduct> cartItems = new ArrayList<>();
         String query = "SELECT cart.ProductId, cart.Quantity, cart.PriceAtAdd, " +
@@ -24,7 +33,7 @@ public class CartService {
 
         // Get a valid connection from DBConnection
         try (Connection conn = DBConnection.connect();
-                PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+             PreparedStatement preparedStatement = conn.prepareStatement(query)) {
 
             ResultSet res = preparedStatement.executeQuery();
             while (res.next()) {
@@ -40,15 +49,6 @@ public class CartService {
             System.out.println("Error while displaying products in the cart: " + e.getMessage());
         }
         return cartItems;
-    }
-
-    // Method to add a product to the cart
-    public static void addCart(int productId, int quantity) {
-        if (validation.validateQuantity(quantity)) {
-            CartDAO.addCart(productId, quantity);
-        } else {
-            System.out.println(ErrorMessage.ERROR_WHILE_ADDING_PRODUCT_IN_CART);
-        }
     }
 
     // public static ResultSet showSelectedProduct(int productId) {

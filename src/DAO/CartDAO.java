@@ -20,7 +20,7 @@ public class CartDAO {
     public static Product showSelectedProduct(int productId) {
         Product product = null; // Assuming you have a Product class to hold product details
         try (Connection conn = DBConnection.connect();
-                PreparedStatement preparedStatement = conn.prepareStatement(SqlQueries.SELECT_PRODUCT_WITH_ID)) {
+             PreparedStatement preparedStatement = conn.prepareStatement(SqlQueries.SELECT_PRODUCT_WITH_ID)) {
 
             preparedStatement.setInt(1, productId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -43,10 +43,10 @@ public class CartDAO {
         List<Map<String, Object>> productData = new ArrayList<>();
 
         String selectQuery = SqlQueries.SELECT_PRODUCT_WITH_ID; // Ensure this query has a WHERE clause like: SELECT *
-                                                                // FROM products WHERE ProductId = ?
+        // FROM products WHERE ProductId = ?
 
         try (Connection conn = DBConnection.connect();
-                PreparedStatement preparedStatement = conn.prepareStatement(selectQuery)) {
+             PreparedStatement preparedStatement = conn.prepareStatement(selectQuery)) {
 
             preparedStatement.setInt(1, productId); // Set the productId parameter
 
