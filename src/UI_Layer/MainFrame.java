@@ -1,29 +1,19 @@
 package UI_Layer;
 
-import DAO.CartDAO;
 import Service_layer.CartService;
-import Service_layer.CartService.CartProduct;
-import Service_layer.HomePageService;
-import Service_layer.UserService;
-import Utilities.Constants.SqlQueries;
 
-import java.util.List;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 
+import static UI_Layer.HomePageUi.createHomePanel;
+import static UI_Layer.LoginUi.createLoginPanel;
+import static UI_Layer.ProfileUi.showProfilePage;
+import static UI_Layer.UserRegistrationUi.createRegisterPanel;
 
 class MainFrame extends JFrame {
-    public CardLayout cardLayout;
-    public JPanel mainPanel;
+    private static JPanel mainPanel;
+    private static CardLayout cardLayout;
 
-    private final UserService userService = new UserService();
 
     public MainFrame() {
         setTitle("Ani-Shop E-Commerce-App");
@@ -33,372 +23,247 @@ class MainFrame extends JFrame {
         mainPanel = new JPanel(new CardLayout());
         cardLayout = (CardLayout) mainPanel.getLayout();
 
+
         // Create and add the Login panel
-        JPanel loginPanel = createLoginPanel();
+        JPanel loginPanel = createLoginPanel(cardLayout, mainPanel);
         mainPanel.add(loginPanel, "Login");
 
         // Create and add the Register panel
-        JPanel registerPanel = createRegisterPanel();
+        JPanel registerPanel = createRegisterPanel(cardLayout, mainPanel);
         mainPanel.add(registerPanel, "Register");
 
         // Create and add the Home Page panel
-        JPanel homePanel = createHomePanel();
+        JPanel homePanel = createHomePanel(cardLayout, mainPanel);
         mainPanel.add(homePanel, "Home");
-
 
         // Show the frame
         setContentPane(mainPanel);
         setVisible(true);
     }
 
-    /*** Login Page ***/
-    public JPanel createLoginPanel() {
+//    public JPanel createProductDescriptionPanel(int productID, JPanel mainPanel, CardLayout cardLayout) {
+//        // Create the main panel
+//        JPanel panel = new JPanel();
+//        this.mainPanel = mainPanel;
+//        this.cardLayout = cardLayout;
+//
+//        // Variables to store product details
+//        String productName = "Unknown Product";
+//        String productDescription = "No description available.";
+//        int productStock = 0;
+//        double productPrice = 0.0;
+//
+//        panel.setLayout(null);
+//        panel.setBackground(new Color(30, 30, 30)); // Dark background
+//
+//        // Fetch product details from the database
+//        Product product = CartDAO.showSelectedProduct(productID);
+//        //Product product = CartDAO.showSelectedProduct(productID);
+//
+//        if (product != null) {
+//            productName = product.getProductName();
+//            productDescription = product.getProductDescription();
+//            productStock = product.getProductStock();
+//            productPrice = product.getProductPrice();
+//        } else {
+//            JOptionPane.showMessageDialog(panel, "Product not found.", "Error", JOptionPane.ERROR_MESSAGE);
+//            return panel; // Return the empty panel if no product is found
+//        }
+//
+//        // Create and add labels to the panel
+//        JLabel nameLabel = createLabel(productName, new Font("Arial", Font.BOLD, 26), Color.RED, 0, 20, 480, 50);
+//        nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
+//        panel.add(nameLabel);
+//
+//        JLabel descriptionLabel = createLabel("<html><p style='width:300px;'>" + productDescription + "</p></html>",
+//                new Font("Arial", Font.PLAIN, 14), Color.WHITE, 40, 80, 400, 60);
+//        panel.add(descriptionLabel);
+//
+//        JLabel stockLabel = createLabel("Stock: " + (productStock > 0 ? productStock + " available" : "Out of stock"),
+//                new Font("Arial", Font.PLAIN, 14), productStock > 0 ? Color.GREEN : Color.RED, 40, 150, 200, 25);
+//        panel.add(stockLabel);
+//
+//        JLabel priceLabel = createLabel("Price: ₹" + productPrice, new Font("Arial", Font.BOLD, 16), Color.RED, 40, 180,
+//                200, 25);
+//        panel.add(priceLabel);
+//
+//        // Add to Bag Button
+//        JButton addToBagButton = new JButton("Add to Bag");
+//        addToBagButton.setBounds(150, 230, 150, 40);
+//        addToBagButton.setBackground(Color.RED);
+//        addToBagButton.setForeground(Color.WHITE);
+//        addToBagButton.setFont(new Font("Arial", Font.BOLD, 16));
+//        addToBagButton.setBorder(null);
+//        addToBagButton.setFocusPainted(false);
+//        panel.add(addToBagButton);
+//
+//        // Go Back to Home Button
+//        JButton goBackHome = new JButton("Back to Home");
+//        goBackHome.setBounds(150, 300, 150, 40);
+//        goBackHome.setBackground(Color.RED);
+//        goBackHome.setForeground(Color.WHITE);
+//        goBackHome.setFont(new Font("Arial", Font.BOLD, 16));
+//        goBackHome.setBorder(null);
+//        goBackHome.setFocusPainted(false);
+//        panel.add(goBackHome);
+//
+//        // Add Action Listener to "Add to Bag" Button
+//        int stock = productStock;
+//        String name = productName;
+//        CartService service = new CartService();
+//        addToBagButton.addActionListener(_ -> {
+//
+//            if (stock > 0) {
+//                // Logic for adding the product to the bag (cart)
+//                service.addProductToBag(productID);
+//                JOptionPane.showMessageDialog(panel, name + " has been added to your bag!");
+//                try {
+//                    System.out.println("Navigating back to Home...");
+//                    if (mainPanel != null && cardLayout != null) {
+//                        // Ensure the correct card is being shown
+//                        cardLayout.show(mainPanel, "Home"); // This should match the panel name given when adding
+//                        // homePanel
+//                        mainPanel.revalidate(); // Revalidate layout
+//                        mainPanel.repaint(); // Repaint the panel to reflect the new card
+//                    } else {
+//                        System.out.println("mainPanel or cardLayout is null!");
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    JOptionPane.showMessageDialog(panel, "Error navigating back to Home: " + e.getMessage(), "Error",
+//                            JOptionPane.ERROR_MESSAGE);
+//                }
+//
+//            } else {
+//                JOptionPane.showMessageDialog(panel, "Sorry, this product is out of stock.", "Out of Stock",
+//                        JOptionPane.WARNING_MESSAGE);
+//            }
+//        });
+//
+//        // Add Action Listener to "Back to Home" Button
+//        goBackHome.addActionListener(_ -> {
+//            try {
+//                if (mainPanel != null && cardLayout != null) {
+//                    // Ensure the correct card is being shown
+//                    cardLayout.show(mainPanel, "Cart"); // This should match the panel name given when adding homePanel
+//                    mainPanel.revalidate(); // Revalidate layout
+//                    mainPanel.repaint(); // Repaint the panel to reflect the new card
+//                } else {
+//                    System.out.println("mainPanel or cardLayout is null!");
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                JOptionPane.showMessageDialog(panel, "Error navigating back to Home: " + e.getMessage(), "Error",
+//                        JOptionPane.ERROR_MESSAGE);
+//            }
+//        });
+//
+//        // Create bottom navigation and add it to the bottom of the panel
+//        JPanel bottomNav = createBottomNav(cardLayout, mainPanel);
+//        panel.add(bottomNav, BorderLayout.SOUTH); // Add the bottomNav to the SOUTH region
+//
+//        return panel;
+//    }
+
+
+
+    public static JPanel createProductPanel(int productId, String productName, String productDescription, double productPrice) {
         JPanel panel = new JPanel();
-        panel.setLayout(null); // Use null layout for absolute positioning
-        panel.setBackground(new Color(30, 30, 30)); // Dark background
+        panel.setLayout(new GridLayout(6, 1)); // Add extra rows for description, buttons, and quantity
+        panel.setBackground(new Color(40, 40, 40)); // Slightly lighter dark
 
-        // Create and set the welcome label
-        JLabel label = new JLabel("Welcome Back :)");
-        label.setHorizontalAlignment(SwingConstants.CENTER);
-        label.setFont(new Font("Arial", Font.BOLD, 24));
-        label.setBounds(0, 20, 480, 50);
-        label.setForeground(Color.WHITE);
-        panel.add(label);
+        // Add a border with elevation effect
+        panel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.RED, 2), // Red border for highlight
+                BorderFactory.createEmptyBorder(20, 10, 20, 10) // Padding inside the border
+        ));
 
-        // Add a username label
-        JLabel emailLabel = new JLabel("Enter Email ID:");
-        JTextField emailText = new JTextField(20);
-        field(emailLabel, panel, emailText, 50, 100, 150, 25, 200, 100, 200, 25);
+        panel.setOpaque(true);
 
-        // Add a password label
-        JLabel passwordLabel = new JLabel("Your Password:");
-        JPasswordField passwordText = new JPasswordField(20);
-
-        field(passwordLabel, panel, passwordText, 50, 150, 190, 25, 200, 150, 200, 25);
-
-        // Add a login button
-        JButton loginButton = new JButton("Login");
-        loginButton.setBounds(200, 200, 100, 25);
-        loginButton.setBackground(Color.RED);
-        loginButton.setForeground(Color.WHITE);
-        panel.add(loginButton);
-
-        UserService userService = new UserService();
-        // Add action listener to handle login
-        loginButton.addActionListener(e -> {
-            String emailId = emailText.getText();
-            String password = new String(passwordText.getPassword());
-
-            try {
-                // Call the service layer to authenticate the user
-                userService.loginUser(emailId, password);
-                // If login is successful, show success message
-                JOptionPane.showMessageDialog(panel, "Login successful! :) ");
-                cardLayout.show(mainPanel, "Home");
-            } catch (Exception ex) {
-                // Debugging print to ensure exception is caught
-                System.out.println("Error caught: " + ex.getMessage());
-
-                // Show error message if login fails
-                JOptionPane.showMessageDialog(panel, "Login Failed: " + ex.getMessage(), "Error",
-                        JOptionPane.ERROR_MESSAGE);
-            }
-        });
-
-        // Create a "Not registered? Register" clickable text
-        JLabel registerLabel = new JLabel("<html>Don't have an account? <a href=''>Register here.</a></html>");
-        registerLabel.setForeground(Color.WHITE); // Set color to white
-        registerLabel.setBounds(150, 250, 230, 25);
-        registerLabel.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                cardLayout.show(mainPanel, "Register");
-            }
-        });
-        panel.add(registerLabel);
-
-        return panel;
-    }
-
-    // private CardLayout cardLayout;
-    // private JPanel mainPanel;
-
-    public JPanel createProductDescriptionPanel(int productID, JPanel mainPanel, CardLayout cardLayout) {
-        // Create the main panel
-        JPanel panel = new JPanel();
-        this.mainPanel = mainPanel;
-        this.cardLayout = cardLayout;
-
-        panel.setLayout(null);
-        panel.setBackground(new Color(30, 30, 30)); // Dark background
-
-        // Variables to store product details
-        String productName = "Unknown Product";
-        String productDescription = "No description available.";
-        int productStock = 0;
-        double productPrice = 0.0;
-
-        // Fetch product details from the database
-        ResultSet data = CartDAO.showSelectedProduct(productID);
-        try {
-            if (data != null && data.next()) {
-                productName = data.getString("ProductName");
-                productDescription = data.getString("ProductDescription");
-                productStock = data.getInt("ProductStock");
-                productPrice = data.getDouble("ProductPrice");
-            } else {
-                JOptionPane.showMessageDialog(panel, "Product not found.", "Error", JOptionPane.ERROR_MESSAGE);
-                return panel; // Return the empty panel if no product is found
-            }
-        } catch (SQLException e) {
-            System.out.println("error: " + e);
-            JOptionPane.showMessageDialog(panel, "Error retrieving product details: " + e.getMessage(),
-                    "Database Error", JOptionPane.ERROR_MESSAGE);
-        } finally {
-            try {
-                if (data != null) {
-                    data.getStatement().close();
-                    data.close();
-                }
-            } catch (SQLException e) {
-                System.out.println("Error closing ResultSet: " + e.getMessage());
-            }
-        }
-
-        // Create and add labels to the panel
-        JLabel nameLabel = createLabel(productName, new Font("Arial", Font.BOLD, 26), Color.RED, 0, 20, 480, 50);
-        nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        // Add product name
+        JLabel nameLabel = new JLabel("<html><strong>&nbsp;&nbsp;" + productName + "</strong></html>");
+        nameLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        nameLabel.setForeground(Color.WHITE);
         panel.add(nameLabel);
 
-        JLabel descriptionLabel = createLabel("<html><p style='width:300px;'>" + productDescription + "</p></html>",
-                new Font("Arial", Font.PLAIN, 14), Color.WHITE, 40, 80, 400, 60);
-        panel.add(descriptionLabel);
+        // Add product description
+        JLabel descLabel = new JLabel("<html>&nbsp;&nbsp;" + productDescription + "</html>");
+        descLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        descLabel.setForeground(Color.LIGHT_GRAY);
+        panel.add(descLabel);
 
-        JLabel stockLabel = createLabel("Stock: " + (productStock > 0 ? productStock + " available" : "Out of stock"),
-                new Font("Arial", Font.PLAIN, 14), productStock > 0 ? Color.GREEN : Color.RED, 40, 150, 200, 25);
-        panel.add(stockLabel);
-
-        JLabel priceLabel = createLabel("Price: ₹" + productPrice, new Font("Arial", Font.BOLD, 16), Color.RED, 40, 180,
-                200, 25);
+        // Add product price
+        JLabel priceLabel = new JLabel("<html>&nbsp;&nbsp;Price: ₹" + productPrice + "</html>");
+        priceLabel.setFont(new Font("Arial", Font.PLAIN, 15));
+        priceLabel.setForeground(Color.GREEN);
         panel.add(priceLabel);
 
-        // Add to Bag Button
+        // Quantity Picker Panel
+        JPanel quantityPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        quantityPanel.setBackground(new Color(40, 40, 40));
+
+        // Quantity label
+        JLabel quantityLabel = new JLabel("Quantity: ");
+        quantityLabel.setForeground(Color.WHITE);
+        quantityLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        quantityPanel.add(quantityLabel);
+
+        // Decrease button
+        JButton minusButton = new JButton("-");
+        minusButton.setFont(new Font("Arial", Font.BOLD, 10));
+        minusButton.setPreferredSize(new Dimension(40, 25));
+        quantityPanel.add(minusButton);
+
+        // Quantity display label
+        JLabel quantityDisplay = new JLabel("1");
+        quantityDisplay.setFont(new Font("Arial", Font.PLAIN, 14));
+        quantityDisplay.setForeground(Color.WHITE);
+        quantityPanel.add(quantityDisplay);
+
+        // Increase button
+        JButton plusButton = new JButton("+");
+        plusButton.setFont(new Font("Arial", Font.BOLD, 10));
+        plusButton.setPreferredSize(new Dimension(40, 25));
+        quantityPanel.add(plusButton);
+
+        // Add action listeners for quantity buttons
+        final int[] quantity = {1}; // Use an array to allow modification inside lambda
+        minusButton.addActionListener(e -> {
+            if (quantity[0] > 1) { // Prevent going below 1
+                quantity[0]--;
+                quantityDisplay.setText(String.valueOf(quantity[0]));
+            }
+        });
+
+        plusButton.addActionListener(e -> {
+            quantity[0]++;
+            quantityDisplay.setText(String.valueOf(quantity[0]));
+        });
+
+        panel.add(quantityPanel);
+
+        // Add "Add to Bag" button
         JButton addToBagButton = new JButton("Add to Bag");
-        addToBagButton.setBounds(150, 230, 150, 40);
-        addToBagButton.setBackground(Color.RED);
-        addToBagButton.setForeground(Color.WHITE);
-        addToBagButton.setFont(new Font("Arial", Font.BOLD, 16));
-        addToBagButton.setBorder(null);
-        addToBagButton.setFocusPainted(false);
+        addToBagButton.setBackground(new Color(255, 69, 0)); // Orange background
+        addToBagButton.setForeground(Color.WHITE); // White text
+        addToBagButton.setFocusPainted(false); // Remove focus highlight
+        addToBagButton.setFont(new Font("Arial", Font.BOLD, 14)); // Bold font
+        addToBagButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20)); // Padding for the button
+
+        // Action listener for "Add to Bag" button
+        addToBagButton.addActionListener(e -> {
+            CartService.addCart(productId, quantity[0]);
+            JOptionPane.showMessageDialog(panel,  productName + " added to bag"+ " of Quantity: " + quantity[0]);
+
+        });
+
         panel.add(addToBagButton);
 
-        //Go Back to Home Button
-        JButton goBackHome = new JButton("Back to Home");
-        goBackHome.setBounds(150, 300, 150, 40);
-        goBackHome.setBackground(Color.RED);
-        goBackHome.setForeground(Color.WHITE);
-        goBackHome.setFont(new Font("Arial", Font.BOLD, 16));
-        goBackHome.setBorder(null);
-        goBackHome.setFocusPainted(false);
-        panel.add(goBackHome);
-
-        // Add Action Listener to Button
-        int finalProductStock = productStock;
-        String finalProductName = productName;
-
-        CartService service = new CartService();
-
-        addToBagButton.addActionListener(_ -> {
-            if (finalProductStock > 0) {
-                // Logic for adding the product to the bag (cart)
-
-                service.addProductToBag(productID);
-
-                JOptionPane.showMessageDialog(panel, finalProductName + " has been added to your bag!");
-            } else {
-                JOptionPane.showMessageDialog(panel, "Sorry, this product is out of stock.", "Out of Stock",
-                        JOptionPane.WARNING_MESSAGE);
-            }
-        });
-
-
-        goBackHome.addActionListener(_ -> {
-            try {
-                if (mainPanel != null && cardLayout != null) {
-                    System.out.println("Navigating back to Home...");
-                    cardLayout.show(mainPanel, "Home");
-                    //mainPanel.revalidate();
-                    //mainPanel.repaint();
-                } else {
-                    System.out.println("mainPanel or cardLayout is null!");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(panel, "Error navigating back to Home: " + e.getMessage(), "Error",
-                        JOptionPane.ERROR_MESSAGE);
-            }
-        });
-
-        // Create bottom navigation and add it to the bottom of the panel
-        JPanel bottomNav = createBottomNav();
-        panel.add(bottomNav, BorderLayout.SOUTH); // Add the bottomNav to the SOUTH region
-
         return panel;
     }
 
-    // Helper method to create a JLabel
-    private JLabel createLabel(String text, Font font, Color color, int x, int y, int width, int height) {
-        JLabel label = new JLabel(text);
-        label.setFont(font);
-        label.setForeground(color);
-        label.setBounds(x, y, width, height);
-        return label;
-    }
 
-    public JPanel createRegisterPanel() {
-        JPanel panel = new JPanel();
-        panel.setLayout(null);
-        panel.setBackground(new Color(30, 30, 30)); // Dark background
-
-        // Create and set the title label
-        JLabel label = new JLabel("Welcome to Ani-Shop :)");
-        label.setHorizontalAlignment(SwingConstants.CENTER);
-        label.setFont(new Font("Arial", Font.BOLD, 24));
-        label.setBounds(0, 20, 480, 50);
-        label.setForeground(Color.WHITE);
-        panel.add(label);
-
-        // Add a name label and text field
-        JLabel nameLabel = new JLabel("Enter Your Name:");
-        JTextField nameText = new JTextField(20);
-
-        field(nameLabel, panel, nameText, 50, 90, 150, 25, 200, 90, 200, 25);
-
-        // Add an email label and text field
-
-        JLabel emailLabel = new JLabel("Enter Email ID:");
-        JTextField emailText = new JTextField(20);
-
-        field(emailLabel, panel, emailText, 50, 120, 150, 25, 200, 120, 200, 25);
-
-        // Add a password label and password field
-
-        JLabel passwordLabel = new JLabel("Enter Password:");
-        JPasswordField passwordText = new JPasswordField(20);
-        field(passwordLabel, panel, passwordText, 50, 150, 150, 25, 200, 150, 200, 25);
-
-        // Add a gender label and radio buttons
-        JLabel genderLabel = new JLabel("Choose Gender:");
-        genderLabel.setBounds(50, 180, 150, 25);
-        genderLabel.setForeground(Color.WHITE);
-        panel.add(genderLabel);
-
-        JRadioButton maleButton = new JRadioButton("Male");
-        radioButtonTemplate(maleButton, panel, 200, 180, 70, 25);
-
-        JRadioButton femaleButton = new JRadioButton("Female");
-        radioButtonTemplate(femaleButton, panel, 280, 180, 80, 25);
-
-        JRadioButton otherButton = new JRadioButton("Other");
-        radioButtonTemplate(otherButton, panel, 370, 180, 70, 25);
-
-        JLabel ageLabel = new JLabel("Enter Your Age:");
-        JTextField ageText = new JTextField(20);
-        field(ageLabel, panel, ageText, 50, 210, 150, 25, 200, 210, 200, 25);
-
-        JLabel contactLabel = new JLabel("Your Contact Number:");
-        JTextField contactText = new JTextField(20);
-        field(contactLabel, panel, contactText, 50, 240, 150, 25, 200, 240, 200, 25);
-
-        // Add a register button
-        JButton registerButton = new JButton("Register");
-        registerButton.setBounds(200, 300, 100, 25);
-        registerButton.setBackground(Color.RED);
-        registerButton.setForeground(Color.WHITE);
-        panel.add(registerButton);
-
-        // Add action listener to handle registration
-        registerButton.addActionListener(_ -> {
-            String name = nameText.getText();
-            String password = new String(passwordText.getPassword());
-            String age = ageText.getText();
-            String email = emailText.getText();
-            String phoneNumber = contactText.getText();
-            char gender = ' '; // Default value
-            if (name.isEmpty() || password.isEmpty() || age.isEmpty() || email.isEmpty() || phoneNumber.isEmpty()
-                    || gender == ' ') {
-                JOptionPane.showMessageDialog(panel, "Please fill the required details.", "Error",
-                        JOptionPane.ERROR_MESSAGE);
-                return; // Stop further execution if fields are not filled
-            }
-
-            if (maleButton.isSelected()) {
-                gender = 'M'; // Male
-            } else if (femaleButton.isSelected()) {
-                gender = 'F'; // Female
-            } else if (otherButton.isSelected()) {
-                gender = 'O'; // Other
-            }
-
-            try {
-                // Call the service layer to register the user
-                userService.registerUser(email, password, name, gender, Integer.parseInt(age), phoneNumber);
-
-                // If registration is successful, show success message
-                JOptionPane.showMessageDialog(panel, "Registration successful.. :) ");
-
-                // Switch to Log in UI after successful registration
-                cardLayout.show(mainPanel, "Login");
-            } catch (Exception ex) {
-                // In case of any error during the registration process, show error message
-                // JOptionPane.showMessageDialog(panel, "Error: " + ex.getMessage(), "Registration Failed",
-                //         JOptionPane.ERROR_MESSAGE);
-                JOptionPane.showMessageDialog(panel, "Error" + ex.getMessage(), "Registration Failed",
-                        JOptionPane.ERROR_MESSAGE);
-            }
-        });
-
-        // Create an "Already registered? Login" clickable text
-        JLabel loginLabel = new JLabel("<html>Already have an account? <a href=''>Login here.</a></html>");
-
-        loginLabel.setBounds(150, 360, 250, 25); // Position and size
-        loginLabel.setForeground(Color.WHITE); // Set the color for the clickable text
-        loginLabel.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                cardLayout.show(mainPanel, "Login");
-            }
-        });
-        panel.add(loginLabel);
-
-        return panel;
-    }
-
-    public JPanel createHomePanel() {
-        JPanel homePanel = new JPanel(new BorderLayout());
-        homePanel.setBackground(new Color(30, 30, 30)); // Dark background
-
-        // Create a JScrollPane for scrolling
-        JScrollPane scrollPane = new JScrollPane();
-        JPanel homeContentPanel = new JPanel();
-        homeContentPanel.setLayout(new BoxLayout(homeContentPanel, BoxLayout.Y_AXIS));
-        homeContentPanel.setBackground(new Color(30, 30, 30)); // Dark background
-
-        JPanel productPanel = fetchAndDisplay();
-        if (productPanel != null) {
-            homeContentPanel.add(productPanel);
-        }
-
-        // Set the content to scroll pane
-        scrollPane.setViewportView(homeContentPanel);
-        homePanel.add(scrollPane, BorderLayout.CENTER);
-
-        // Add Bottom Navigation
-        JPanel bottomNav = createBottomNav();
-        homePanel.add(bottomNav, BorderLayout.SOUTH);
-
-        return homePanel;
-    }
-
-    private JPanel createProductPanel(String... details) {
+    public static JPanel createProductPanel(String... details) {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(3, 1));
         panel.setBackground(new Color(40, 40, 40)); // Slightly lighter dark
@@ -421,157 +286,11 @@ class MainFrame extends JFrame {
             panel.add(label);
         }
 
-
-//        panel.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//                JOptionPane.showMessageDialog(panel, "Product clicked: " + name);
-//            }
-//        });
-
         return panel;
     }
 
 
-//    public JPanel createProductPanel(String name, String description, String price) {
-//        JPanel panel = new JPanel();
-//        panel.setLayout(new GridLayout(3, 1));
-//        panel.setBackground(new Color(40, 40, 40)); // Slightly lighter dark
-//
-//        // Add a border with elevation effect (shadow-like)
-//        panel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.RED, 2), // Red border
-//                // for
-//                // highlight
-//                BorderFactory.createEmptyBorder(20, 10, 20, 10) // Padding inside the border
-//        ));
-//
-//        // Set a slight shadow effect using background color and border
-//        panel.setBackground(new Color(40, 40, 40));
-//        panel.setOpaque(true);
-//
-//        // Add product labels
-//        // JLabel nameLabel = new JLabel("Product Name: " + name);
-//        // nameLabel.setFont(new Font("Arial", Font.BOLD, 15)); // Set the font to bold
-//        // nameLabel.setForeground(Color.WHITE);
-//
-//        // JLabel descriptionLabel = new JLabel("Description: " + description);
-//        // descriptionLabel.setFont(new Font("Arial", Font.BOLD, 15)); // Set the font to bold
-//        // descriptionLabel.setForeground(Color.WHITE);
-//
-//        // JLabel priceLabel = new JLabel("Price: " + price);
-//        // priceLabel.setFont(new Font("Arial", Font.BOLD, 15)); // Set the font to bold
-//        // priceLabel.setForeground(Color.RED);
-//
-//
-//        JLabel nameLabel = new JLabel("<html><b>Product Name:</b>&nbsp;&nbsp;" + name + "</html>");
-//        nameLabel.setFont(new Font("Arial", Font.PLAIN, 15)); // Keep the font normal for inner content
-//        nameLabel.setForeground(Color.WHITE);
-//
-//        JLabel descriptionLabel = new JLabel("<html><b>Description:</b>&nbsp;&nbsp;" + description + "</html>");
-//        descriptionLabel.setFont(new Font("Arial", Font.PLAIN, 15)); // Keep the font normal for inner content
-//        descriptionLabel.setForeground(Color.WHITE);
-//
-//        JLabel priceLabel = new JLabel("<html><b>Price:</b>&nbsp;&nbsp;" + price + "</html>");
-//        priceLabel.setFont(new Font("Arial", Font.PLAIN, 15)); // Keep the font normal for inner content
-//        priceLabel.setForeground(Color.RED);
-//
-//        panel.add(nameLabel);
-//        panel.add(descriptionLabel);
-//        panel.add(priceLabel);
-//
-//        // Add MouseListener for click action on product
-//        panel.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//                JOptionPane.showMessageDialog(panel, "Product clicked: " + name);
-//            }
-//        });
-//
-//        return panel;
-//    }
-
-    /*** Cart Page */
-    private void showCartPage() {
-        JPanel cartPanel = new JPanel(new BorderLayout());
-        cartPanel.setBackground(new Color(30, 30, 30)); // Dark background
-
-        JScrollPane scrollPane = new JScrollPane();
-        JPanel cartContentPanel = new JPanel();
-        cartContentPanel.setLayout(new BoxLayout(cartContentPanel, BoxLayout.Y_AXIS));
-        cartContentPanel.setBackground(new Color(30, 30, 30)); // Dark background
-
-        CartService service = new CartService();
-        List<CartProduct> cartItems = service.displayCartItems();
-
-        for (CartProduct cartProduct : cartItems) {
-            JPanel cartProductPanel = createProductPanel(
-                    "Name: " + cartProduct.getProductName(),
-                    "Description: " + cartProduct.getProductDescription(),
-                    "Quantity: " + cartProduct.getQuantity(),
-                    "Price: $" + cartProduct.getPriceAtAdd()
-            );
-            cartContentPanel.add(cartProductPanel);
-        }
-
-        scrollPane.setViewportView(cartContentPanel);
-        cartPanel.add(scrollPane, BorderLayout.CENTER);
-
-        JPanel buyAllPanel = new JPanel();
-        buyAllPanel.setBackground(new Color(40, 40, 40));
-        JButton buyAllButton = new JButton("Buy All");
-        buyAllButton.setBackground(Color.RED);
-        buyAllButton.setForeground(Color.WHITE);
-        buyAllButton.setPreferredSize(new Dimension(500, 40));
-        buyAllButton.addActionListener(_ -> JOptionPane.showMessageDialog(cartPanel, "All products bought!"));
-
-        buyAllPanel.add(buyAllButton);
-        cartPanel.add(buyAllPanel, BorderLayout.SOUTH);
-
-        JPanel bottomNav = createBottomNav();
-        cartPanel.add(bottomNav, BorderLayout.NORTH);
-
-        mainPanel.add(cartPanel, "Cart");
-        cardLayout.show(mainPanel, "Cart");
-    }
-
-    private void showProfilePage() {
-        JPanel profilePanel = new JPanel(new BorderLayout());
-        profilePanel.setBackground(new Color(30, 30, 30)); // Dark background
-
-        JPanel profileContent = new JPanel();
-        profileContent.setLayout(new BoxLayout(profileContent, BoxLayout.Y_AXIS));
-        profileContent.setBackground(new Color(30, 30, 30)); // Dark background
-
-        // Add profile information with better visibility
-        JLabel nameLabel = new JLabel("Name: John Doe");
-        nameLabel.setForeground(Color.WHITE);
-        JLabel emailLabel = new JLabel("Email: john.doe@example.com");
-        emailLabel.setForeground(Color.WHITE);
-        JLabel addressLabel = new JLabel("Address: 1234 Elm Street");
-        addressLabel.setForeground(Color.WHITE);
-        JLabel phoneLabel = new JLabel("Phone: +1 (555) 123-4567");
-        phoneLabel.setForeground(Color.WHITE);
-        JLabel paymentLabel = new JLabel("Payment Method: Visa **** 1234");
-        paymentLabel.setForeground(Color.WHITE);
-
-        profileContent.add(nameLabel);
-        profileContent.add(emailLabel);
-        profileContent.add(addressLabel);
-        profileContent.add(phoneLabel);
-        profileContent.add(paymentLabel);
-
-        JScrollPane scrollPane = new JScrollPane(profileContent);
-        profilePanel.add(scrollPane, BorderLayout.CENTER);
-
-        // Add Bottom Navigation
-        JPanel bottomNav = createBottomNav();
-        profilePanel.add(bottomNav, BorderLayout.NORTH);
-
-        mainPanel.add(profilePanel, "Profile");
-        cardLayout.show(mainPanel, "Profile");
-    }
-
-    private JPanel createBottomNav() {
+    public static JPanel createBottomNav(CardLayout cardLayout, JPanel mainPanel) {
         JPanel bottomNav = new JPanel();
         bottomNav.setLayout(new FlowLayout(FlowLayout.CENTER));
         bottomNav.setBackground(new Color(40, 40, 40)); // Dark background
@@ -592,26 +311,17 @@ class MainFrame extends JFrame {
         bottomNav.add(cartButton);
         bottomNav.add(profileButton);
 
-        // Action listeners for navigation
-        homeButton.addActionListener(_ -> cardLayout.show(mainPanel, "Home"));
-        cartButton.addActionListener(_ -> showCartPage());
-        profileButton.addActionListener(_ -> showProfilePage());
+        // Pass the initialized mainPanel and cardLayout
+        homeButton.addActionListener(_ -> createHomePanel(cardLayout, mainPanel));
+        cartButton.addActionListener(_ -> CartUi.showCartPage(cardLayout, mainPanel));
+        profileButton.addActionListener(_ -> showProfilePage(cardLayout, mainPanel));
 
         return bottomNav;
     }
 
-    // Register Page
 
-    public void radioButtonTemplate(JRadioButton radioButton, JPanel panel, int x, int y, int width, int height) {
-        radioButton.setBounds(x, y, width, height);
-        radioButton.setBackground(new Color(30, 30, 30));
-        radioButton.setForeground(Color.WHITE);
-        panel.add(radioButton);
-
-    }
-
-    public void field(JLabel jLabel, JPanel panel, JTextField textField, int x, int y, int width1, int height1, int x1,
-                      int y1, int width2, int height2) {
+    public static void field(JLabel jLabel, JPanel panel, JTextField textField, int x, int y, int width1, int height1, int x1,
+                             int y1, int width2, int height2) {
         jLabel.setBounds(x, y, width1, height1);
         jLabel.setForeground(Color.WHITE);
         panel.add(jLabel);
@@ -619,107 +329,6 @@ class MainFrame extends JFrame {
         panel.add(textField);
     }
 
-
-//    public JPanel fetchCart() {
-//        JPanel productContainer = new JPanel();
-//        productContainer.setLayout(new BoxLayout(productContainer, BoxLayout.Y_AXIS));
-//        productContainer.setBackground(new Color(30, 30, 30)); // Dark background
-//
-//        ResultSet data = HomePageService.showProducts();
-//        try {
-//            while (data != null && data.next()) {
-//                int cartId = data.getInt("CartId");
-//                int productId = data.getInt("ProductId");
-//                int productQuantity = data.getInt("Quanitiy");
-//                double productPrice = data.getDouble("PriceAtAdd");
-//
-//                // Create a product panel
-//                JPanel productPanel = createProductPanel(cartId, productDescription, String.valueOf(productPrice));
-//
-//                // Add a MouseListener to navigate to the description page
-//                productPanel.addMouseListener(new java.awt.event.MouseAdapter() {
-//                    public void mouseClicked(java.awt.event.MouseEvent evt) {
-//                        JPanel descriptionPanel = createProductDescriptionPanel(productId, mainPanel, cardLayout);
-//
-//
-//                        // Replace the home panel content with the description panel
-//                        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(productContainer);
-//                        frame.getContentPane().removeAll();
-//                        frame.getContentPane().add(descriptionPanel);
-//                        frame.revalidate();
-//                        frame.repaint();
-//                    }
-//                });
-//
-//                productContainer.add(productPanel);
-//            }
-//        } catch (SQLException e) {
-//            System.out.println("Error: " + e);
-//        } finally {
-//            try {
-//                if (data != null) {
-//                    data.getStatement().close();
-//                    data.close();
-//                }
-//            } catch (SQLException e) {
-//                System.out.println("Error: " + e);
-//            }
-//        }
-//
-//        return productContainer;
-//
-//    }
-//
-
-    public JPanel fetchAndDisplay() {
-        // Parent panel to hold all product panels
-        JPanel productContainer = new JPanel();
-        productContainer.setLayout(new BoxLayout(productContainer, BoxLayout.Y_AXIS));
-        productContainer.setBackground(new Color(30, 30, 30)); // Dark background
-
-        ResultSet data = HomePageService.showProducts();
-        try {
-            while (data != null && data.next()) {
-                int productId = data.getInt("ProductId");
-                String productName = data.getString("ProductName");
-                String productDescription = data.getString("ProductDescription");
-                double productPrice = data.getDouble("ProductPrice");
-
-                // Create a product panel
-                JPanel productPanel = createProductPanel(productName, productDescription, String.valueOf(productPrice));
-
-                // Add a MouseListener to navigate to the description page
-                productPanel.addMouseListener(new java.awt.event.MouseAdapter() {
-                    public void mouseClicked(java.awt.event.MouseEvent evt) {
-                        JPanel descriptionPanel = createProductDescriptionPanel(productId, mainPanel, cardLayout);
-                        ;
-
-                        // Replace the home panel content with the description panel
-                        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(productContainer);
-                        frame.getContentPane().removeAll();
-                        frame.getContentPane().add(descriptionPanel);
-                        frame.revalidate();
-                        frame.repaint();
-                    }
-                });
-
-                productContainer.add(productPanel);
-            }
-        } catch (SQLException e) {
-            System.out.println("Error: " + e);
-        } finally {
-            try {
-                if (data != null) {
-                    data.getStatement().close();
-                    data.close();
-                }
-            } catch (SQLException e) {
-                System.out.println("Error: " + e);
-            }
-        }
-
-        return productContainer;
-    }
 
     public static void main(String[] args) {
         new MainFrame();

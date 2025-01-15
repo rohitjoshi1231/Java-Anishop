@@ -5,7 +5,6 @@ import Utilities.Constants.ErrorMessage;
 import Utilities.ValidationUtil;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class ProductService {
     ValidationUtil validation = new ValidationUtil();

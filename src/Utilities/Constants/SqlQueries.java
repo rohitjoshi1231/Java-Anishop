@@ -10,4 +10,5 @@ public class SqlQueries {
     public static final String SELECT_PRODUCT_WITH_ID = "SELECT * FROM Products WHERE ProductID = ?";
     public static final String SHOW_CART_PRODUCTS = "SELECT * FROM cart";
     public static final String INSERT_INTO_CART = "INSERT INTO cart (CartId, ProductId, Quantity, PriceAtAdd) VALUES (?, ?, ?, ?)";
+    public static final String SHOW_USER_DETAILS = "select * from userregister where emailid= ?";
 }

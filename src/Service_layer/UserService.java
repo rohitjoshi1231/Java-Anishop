@@ -4,8 +4,14 @@ import DAO.UserDAO;
 import Utilities.Constants.ErrorMessage;
 import Utilities.ValidationUtil;
 
+import javax.swing.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class UserService {
     private final ValidationUtil validation = new ValidationUtil();
@@ -20,38 +26,59 @@ public class UserService {
             String phoneNumber) {
 
         if (validation.validateRegister(emailId, password, name, gender, age, phoneNumber)) {
-            userDAO.registerUser(emailId, password, name, gender, age, phoneNumber);
+            userDAO.registerUser(emailId, hashString(password), name, gender, age, phoneNumber);
         } else {
             System.out.println("Please Enter correct details !");
         }
     }
 
-    public void loginUser(String emailId, String password) {
+
+    public static String hashString(String input) {
+        try {
+            // Create a MessageDigest instance for MD5 hashing
+            MessageDigest md = MessageDigest.getInstance("MD5");
+
+            // Update the digest with the input string bytes
+            byte[] hashBytes = md.digest(input.getBytes());
+
+            // Convert the byte array to a hex string
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hashBytes) {
+                // Convert each byte to a 2-digit hexadecimal string
+                hexString.append(String.format("%02x", b));
+            }
+
+            return hexString.toString();  // Return the hash as a hex string
+        } catch (NoSuchAlgorithmException e) {
+            System.out.println("Error: " + e);
+            return null;
+        }
+    }
+    public boolean loginUser(String emailId, String password) {
+        boolean found = false;
         ResultSet res1 = null;
         try {
-            // Fetch user details
-            res1 = userDAO.loginUser();
-            if (res1 == null) {
-                System.out.println("No data found or an error occurred while fetching user details.");
-                return;
+            found = validation.validateEmailId(emailId);
+            // Fetch user details based on the provided emailId
+            res1 = userDAO.loginUser(emailId); // Assume this method fetches user based on the email
+            if (res1 == null || !res1.next()) {
+                throw new Exception("No user found with the provided email.");
             }
 
-            String fetchedEmailId = "";
-            String fetchedPassword = "";
+            String fetchedPassword = res1.getString("Password");
 
-            while (res1.next()) {
-                fetchedEmailId = res1.getString("EmailId");
-                fetchedPassword = res1.getString("Password");
-            }
-
-            if (fetchedEmailId.equals(emailId) && fetchedPassword.equals(password)) {
-                System.out.println("Match found for: " + fetchedEmailId);
+            // Validate the fetched password
+            if (fetchedPassword.equals(password)) {
+                found = true;
             } else {
-                System.out.println(ErrorMessage.ERROR_WHILE_LOGIN);
+                found = false;
+                throw new Exception("Incorrect password.");
             }
 
         } catch (SQLException e) {
             System.out.println("Error while processing user details: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());  // Log the error message
         } finally {
             if (res1 != null) {
                 try {
@@ -61,10 +88,72 @@ public class UserService {
                 }
             }
         }
+
+        return  found;
     }
 
-        
-    
+
+
+    public List<UserData> fetchUserData(String emailId) {
+        List<UserData> userList = new ArrayList<>();
+        ResultSet resultSet = userDAO.fetchUser(emailId);
+
+        try {
+            while (resultSet != null && resultSet.next()) {
+                // Create and populate UserData object
+                UserData user = new UserData(
+                        resultSet.getString("id"),
+                        resultSet.getString("emailid"),
+                        resultSet.getString("name"),
+                        resultSet.getString("gender"),
+                        resultSet.getInt("age"),
+                        resultSet.getString("phoneNumber")
+                );
+                userList.add(user);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error while processing user data: " + e.getMessage());
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();  // Close ResultSet after processing
+                }
+            } catch (SQLException e) {
+                System.out.println("Error while closing ResultSet: " + e.getMessage());
+            }
+        }
+
+        return userList;
+    }
+
+    // UserData class to hold the user details
+    public static class UserData {
+        private String id;
+        private String emailId;
+        private String name;
+        private String gender;
+        private int age;
+        private String phoneNumber;
+
+        public UserData(String id, String emailId, String name, String gender, int age, String phoneNumber) {
+            this.id = id;
+            this.emailId = emailId;
+            this.name = name;
+            this.gender = gender;
+            this.age = age;
+            this.phoneNumber = phoneNumber;
+        }
+
+        // Getter methods
+        public String id() { return id; }
+        public String emailId() { return emailId; }
+        public String name() { return name; }
+        public String gender() { return gender; }
+        public int age() { return age; }
+        public String phoneNumber() { return phoneNumber; }
+    }
+
+
 //     public void loginUser(String emailId, String password) throws Exception {
 //         ResultSet res1 = null;
 //         try {

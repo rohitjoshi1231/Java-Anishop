@@ -1,136 +1,96 @@
 package UI_Layer;
 
+
 import Service_layer.UserService;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import static UI_Layer.MainFrame.field;
 
-class UserRegistrationUi {
-    private final CardLayout cardLayout;
-    private final JPanel mainPanel;
+public class UserRegistrationUi {
+    private static final UserService userService = new UserService();
 
-    public UserRegistrationUi(CardLayout cardLayout, JPanel mainPanel) {
-        this.cardLayout = cardLayout;
-        this.mainPanel = mainPanel;
-    }
-
-    public JPanel createUserRegistrationPanel() {
+    public static JPanel createRegisterPanel(CardLayout cardLayout, JPanel mainPanel) {
         JPanel panel = new JPanel();
-        panel.setLayout(null); // Use null layout for absolute positioning
-        panel.setBackground(Color.BLACK);
+        panel.setLayout(null);
+        panel.setBackground(new Color(30, 30, 30)); // Dark background
 
-        // Create and set the welcome label
+        // Create and set the title label
         JLabel label = new JLabel("Welcome to Ani-Shop :)");
-        label.setHorizontalAlignment(SwingConstants.CENTER); // Center horizontally
-        label.setFont(new Font("Arial", Font.BOLD, 24)); // Set font size and style
-        label.setBounds(0, 20, 480, 50); // Set position and size
-        label.setForeground(Color.WHITE); // Set text color to white
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        label.setFont(new Font("Arial", Font.BOLD, 24));
+        label.setBounds(0, 20, 480, 50);
+        label.setForeground(Color.WHITE);
         panel.add(label);
 
-        // Add components to the panel
-        placeComponents(panel);
+        // Add a name label and text field
+        JLabel nameLabel = new JLabel("Enter Your Name:");
+        JTextField nameText = new JTextField(20);
 
-        return panel;
-    }
+        field(nameLabel, panel, nameText, 50, 90, 150, 25, 200, 90, 200, 25);
 
-    public void placeComponents(JPanel panel) {
-        // Add a user label
-        JLabel userLabel = new JLabel("Enter Username:");
-        userLabel.setBounds(50, 80, 190, 25); // Position and size
-        panel.add(userLabel);
-        userLabel.setForeground(Color.WHITE); // Set text color to white
+        // Add an email label and text field
 
-        // Add a text field for the username
-        JTextField userText = new JTextField(20);
-        userText.setBounds(200, 80, 200, 25); // Position and size
-        panel.add(userText);
-
-        // Add an email label
         JLabel emailLabel = new JLabel("Enter Email ID:");
-        emailLabel.setBounds(50, 120, 150, 25); // Position and size
-        panel.add(emailLabel);
-        emailLabel.setForeground(Color.WHITE); // Set text color to white
-
-        // Add a text field for the email
         JTextField emailText = new JTextField(20);
-        emailText.setBounds(200, 120, 200, 25); // Position and size
-        panel.add(emailText);
 
-        // Add a phone number label
-        JLabel phoneNumberLabel = new JLabel("Enter Phone Number:");
-        phoneNumberLabel.setBounds(50, 160, 150, 25); // Position and size
-        panel.add(phoneNumberLabel);
-        phoneNumberLabel.setForeground(Color.WHITE); // Set text color to white
+        field(emailLabel, panel, emailText, 50, 120, 150, 25, 200, 120, 200, 25);
 
-        // Add a text field for the phone number
-        JTextField phoneNumberText = new JTextField(20);
-        phoneNumberText.setBounds(200, 160, 200, 25); // Position and size
-        panel.add(phoneNumberText);
+        // Add a password label and password field
 
-        // Add a gender label
-        JLabel genderLabel = new JLabel("Choose Gender:");
-        genderLabel.setBounds(50, 200, 150, 25); // Position and size
-        panel.add(genderLabel);
-        genderLabel.setForeground(Color.WHITE); // Set text color to white
-
-        // Add radio buttons for gender selection
-        JRadioButton maleButton = new JRadioButton("M");
-        JRadioButton femaleButton = new JRadioButton("F");
-        JRadioButton otherButton = new JRadioButton("O");
-        maleButton.setBounds(200, 200, 70, 25); // Position and size
-        femaleButton.setBounds(280, 200, 80, 25); // Position and size
-        otherButton.setBounds(370, 200, 70, 25); // Position and size
-
-        // Group the radio buttons
-        ButtonGroup genderGroup = new ButtonGroup();
-        genderGroup.add(maleButton);
-        genderGroup.add(femaleButton);
-        genderGroup.add(otherButton);
-
-        panel.add(maleButton);
-        panel.add(femaleButton);
-        panel.add(otherButton);
-
-        // Add an age label
-        JLabel userAge = new JLabel("Enter Your Age:");
-        userAge.setBounds(50, 240, 240, 25); // Position and size
-        panel.add(userAge);
-        userAge.setForeground(Color.WHITE); // Set text color to white
-
-        // Add a text field for the age
-        JTextField userAgeText = new JTextField(20);
-        userAgeText.setBounds(200, 240, 200, 25); // Position and size
-        panel.add(userAgeText);
-
-        // Add a password label
         JLabel passwordLabel = new JLabel("Enter Password:");
-        passwordLabel.setBounds(50, 280, 150, 25); // Position and size
-        panel.add(passwordLabel);
-        passwordLabel.setForeground(Color.WHITE); // Set text color to white
-
-        // Add a password field
         JPasswordField passwordText = new JPasswordField(20);
-        passwordText.setBounds(200, 280, 200, 25); // Position and size
-        panel.add(passwordText);
+        field(passwordLabel, panel, passwordText, 50, 150, 150, 25, 200, 150, 200, 25);
+
+        // Add a gender label and radio buttons
+        JLabel genderLabel = new JLabel("Choose Gender:");
+        genderLabel.setBounds(50, 180, 150, 25);
+        genderLabel.setForeground(Color.WHITE);
+        panel.add(genderLabel);
+
+        JRadioButton maleButton = new JRadioButton("Male");
+        radioButtonTemplate(maleButton, panel, 200, 180, 70, 25);
+
+        JRadioButton femaleButton = new JRadioButton("Female");
+        radioButtonTemplate(femaleButton, panel, 280, 180, 80, 25);
+
+        JRadioButton otherButton = new JRadioButton("Other");
+        radioButtonTemplate(otherButton, panel, 370, 180, 70, 25);
+
+        JLabel ageLabel = new JLabel("Enter Your Age:");
+        JTextField ageText = new JTextField(20);
+        field(ageLabel, panel, ageText, 50, 210, 150, 25, 200, 210, 200, 25);
+
+        JLabel contactLabel = new JLabel("Your Contact Number:");
+        JTextField contactText = new JTextField(20);
+        field(contactLabel, panel, contactText, 50, 240, 150, 25, 200, 240, 200, 25);
 
         // Add a register button
         JButton registerButton = new JButton("Register");
-        registerButton.setBounds(200, 320, 100, 25); // Position and size
+        registerButton.setBounds(200, 300, 100, 25);
+        registerButton.setBackground(Color.RED);
+        registerButton.setForeground(Color.WHITE);
         panel.add(registerButton);
 
-        // Set the text color of the button to white
-        registerButton.setForeground(Color.BLACK); // Set text color to black
-
-        UserService userService = new UserService();
-        // Add action listener to switch to log in UI when register button is clicked
-        registerButton.addActionListener(e -> {
-            // Switch to Log in UI
-            String username = userText.getText();
-            String email = emailText.getText();
-            String phoneNumber = phoneNumberText.getText();
-            String age = userAgeText.getText();
+        // Add action listener to handle registration
+        registerButton.addActionListener(_ -> {
+            String name = nameText.getText();
             String password = new String(passwordText.getPassword());
+            String age = ageText.getText();
+            String email = emailText.getText();
+            String phoneNumber = contactText.getText();
+
+
             char gender = ' '; // Default value
+            if (name.isEmpty() || password.isEmpty() || age.isEmpty() || email.isEmpty() || phoneNumber.isEmpty()) {
+                JOptionPane.showMessageDialog(panel, "Please fill the required details.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
 
             if (maleButton.isSelected()) {
                 gender = 'M'; // Male
@@ -140,34 +100,45 @@ class UserRegistrationUi {
                 gender = 'O'; // Other
             }
 
+
+
             try {
                 // Call the service layer to register the user
-                userService.registerUser(email, password, username, gender, Integer.parseInt(age), phoneNumber);
+                userService.registerUser(email, password, name, gender, Integer.parseInt(age), phoneNumber);
 
                 // If registration is successful, show success message
                 JOptionPane.showMessageDialog(panel, "Registration successful.. :) ");
 
-
                 // Switch to Log in UI after successful registration
                 cardLayout.show(mainPanel, "Login");
             } catch (Exception ex) {
-                // In case of any error during the registration process, show error message
-                JOptionPane.showMessageDialog(panel, "Error: " + ex.getMessage(), "Registration Failed", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(panel, "Error" + ex.getMessage(), "Registration Failed",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
 
-        // Add a clickable text for switching to the Login page
-        JLabel loginRedirectLabel = new JLabel("<html>Already have an account? <a href=''>Login here.</a></html>");
-        loginRedirectLabel.setBounds(150, 360, 250, 25); // Position and size
-        loginRedirectLabel.setForeground(Color.WHITE); // Set the color for the clickable text
-        loginRedirectLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); // Change cursor on hover
-        panel.add(loginRedirectLabel);
+        // Create an "Already registered? Login" clickable text
+        JLabel loginLabel = new JLabel("<html>Already have an account? <a href=''>Login here.</a></html>");
 
-        // Add a mouse listener to the clickable label to switch to login page
-        loginRedirectLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                cardLayout.show(mainPanel, "Login"); // Switch to Login UI when clicked
+        loginLabel.setBounds(150, 360, 250, 25); // Position and size
+        loginLabel.setForeground(Color.WHITE); // Set the color for the clickable text
+        loginLabel.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                cardLayout.show(mainPanel, "Login");
             }
         });
+        panel.add(loginLabel);
+
+        return panel;
+    }
+
+
+
+    public static void radioButtonTemplate(JRadioButton radioButton, JPanel panel, int x, int y, int width, int height) {
+        radioButton.setBounds(x, y, width, height);
+        radioButton.setBackground(new Color(30, 30, 30));
+        radioButton.setForeground(Color.WHITE);
+        panel.add(radioButton);
+
     }
 }

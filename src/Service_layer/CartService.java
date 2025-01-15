@@ -1,10 +1,9 @@
 package Service_layer;
 
-import Utilities.DBConnection;
-import Utilities.ValidationUtil;
 import DAO.CartDAO;
 import Utilities.Constants.ErrorMessage;
-import Utilities.Constants.SqlQueries;
+import Utilities.DBConnection;
+import Utilities.ValidationUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,20 +13,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CartService {
-    private static final Connection conn = DBConnection.connect();
     private static final ValidationUtil validation = new ValidationUtil();
-
 
     public List<CartProduct> displayCartItems() {
         List<CartProduct> cartItems = new ArrayList<>();
-        try (conn) {
-            assert conn != null;
-            PreparedStatement preparedStatement = conn.prepareStatement(
-                    "SELECT cart.ProductId, cart.Quantity, cart.PriceAtAdd, " +
-                            "products.ProductName, products.ProductDescription " +
-                            "FROM cart " +
-                            "JOIN products ON cart.ProductId = products.ProductId"
-            );
+        String query = "SELECT cart.ProductId, cart.Quantity, cart.PriceAtAdd, " +
+                "products.ProductName, products.ProductDescription " +
+                "FROM cart " +
+                "JOIN products ON cart.ProductId = products.ProductId";
+
+        // Get a valid connection from DBConnection
+        try (Connection conn = DBConnection.connect();
+                PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+
             ResultSet res = preparedStatement.executeQuery();
             while (res.next()) {
                 String productId = res.getString("ProductId");
@@ -35,14 +33,14 @@ public class CartService {
                 String productDescription = res.getString("ProductDescription");
                 String quantity = res.getString("Quantity");
                 int priceAtAdd = res.getInt("PriceAtAdd");
+
                 cartItems.add(new CartProduct(productId, productName, productDescription, quantity, priceAtAdd));
             }
         } catch (SQLException e) {
-            System.out.println("Error while displaying products in the cart: " + e);
+            System.out.println("Error while displaying products in the cart: " + e.getMessage());
         }
         return cartItems;
     }
-
 
     // Method to add a product to the cart
     public static void addCart(int productId, int quantity) {
@@ -53,9 +51,9 @@ public class CartService {
         }
     }
 
-    public static ResultSet showSelectedProduct(int productId) {
-        return CartDAO.showSelectedProduct(productId);
-    }
+    // public static ResultSet showSelectedProduct(int productId) {
+    //     return CartDAO.showSelectedProduct(productId);
+    // }
 
     public void addProductToBag(int productId) {
         CartDAO.addToBag(productId);

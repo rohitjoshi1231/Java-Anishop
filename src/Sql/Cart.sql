@@ -1,0 +1,11 @@
+DROP TABLE IF EXISTS cart;
+CREATE TABLE cart (
+    CartId INT AUTO_INCREMENT PRIMARY KEY,
+    ProductId INT NOT NULL,
+    Quantity INT NOT NULL,
+    PriceAtAdd DECIMAL(10, 2) NOT NULL,
+    AddedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (ProductId) REFERENCES products(ProductId)
+);
+
+	

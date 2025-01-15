@@ -37,17 +37,44 @@ public class UserDAO {
         }
     }
 
-    public ResultSet loginUser() {
+    public ResultSet loginUser(String emailId) {
         ResultSet res1 = null;
         try {
-            String userDataQuery = SqlQueries.SELECT_ALL_USERS;
+            // Updated query to fetch a user based on the emailId
+            String userDataQuery = "SELECT * FROM userregister WHERE EmailId = ?";
+
             assert conn != null;
-            Statement userData = conn.createStatement();
+            PreparedStatement userData = conn.prepareStatement(userDataQuery);
+
+            // Set the emailId parameter in the query
+            userData.setString(1, emailId);
+
             // Execute the query and get the result set
-            res1 = userData.executeQuery(userDataQuery);
+            res1 = userData.executeQuery();
         } catch (SQLException e) {
-            System.out.println(ErrorMessage.ERROR_WHILE_REGISTER);
+            System.out.println("Error while fetching user data: " + e.getMessage());
         }
         return res1; // Return the result set (can be null if an error occurred)
     }
+
+
+    public ResultSet fetchUser(String emailId) {
+        ResultSet resultSet = null;
+        PreparedStatement preparedStatement = null;
+        Connection conn = DBConnection.connect(); // Assuming you have a method to get a DB connection
+
+        try {
+            String query = SqlQueries.SHOW_USER_DETAILS;  // Query from your SQL file
+            assert conn != null;
+            preparedStatement = conn.prepareStatement(query);
+            preparedStatement.setString(1, emailId);  // Safely setting the emailId parameter
+            resultSet = preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            System.out.println("Error while fetching user: " + e.getMessage());
+        }
+
+        // Return the ResultSet; don't close it here!
+        return resultSet;
+    }
+
 }
